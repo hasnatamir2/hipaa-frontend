@@ -18,7 +18,7 @@ const DashboardLayout = ({ children }: any) => {
                 {/* Header */}
                 <Header user={user} onLogout={onLogout} />
                 {/* Main Content */}
-                <div>{children}</div>
+                {children}
             </div>
         </div>
     );

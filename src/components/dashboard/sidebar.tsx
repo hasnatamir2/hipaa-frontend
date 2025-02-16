@@ -55,6 +55,16 @@ const Sidebar = () => {
                     </ListItemIcon>
                     <ListItemText>Folders</ListItemText>
                 </ListItem>
+                <ListItem
+                    disablePadding
+                    component={Link}
+                    href='/dashboard/files'
+                >
+                    <ListItemIcon>
+                        <FolderIcon />
+                    </ListItemIcon>
+                    <ListItemText>My Files</ListItemText>
+                </ListItem>
             </List>
         </nav>
     );
