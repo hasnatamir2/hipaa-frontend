@@ -7,17 +7,18 @@ export const getFilesService = async () => {
 };
 
 export const getFileDetailsService = async (fileId: string) => {
-    const response = await axiosInstance.get(
-        `/files/${fileId}`
-    );
+    const response = await axiosInstance.get(`/files/${fileId}`);
     return response.data;
 };
 
-
 export const downloadFileService = async (fileKey: string) => {
-    const response = await axiosInstance.get(`/files/download/${fileKey}`, {
-        responseType: 'blob', // important to get it as blob
-      })
+    const res = await fetch(`/files/download/${fileKey}`);
+    if (!res.ok) throw new Error('Failed to fetch file');
+    const blob = await res.blob();
+    return URL.createObjectURL(blob);
+    // const response = await axiosInstance.get(`/files/download/${fileKey}`, {
+    //     responseType: "blob",
+    // });
 
-    return response.data;
-}
+    // return response.data;
+};

@@ -1,7 +1,7 @@
 "use client";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button, CircularProgress, Typography } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import { useFileDetails, useFileDownload } from "@/hooks/useFiles";
 import { ConvertBytesToKbs } from "@/utils";
 import FileDisplay from "@/components/dashboard/files/file-viewer";
@@ -16,7 +16,6 @@ const FileDetails = () => {
         error,
         isFetched,
     } = useFileDetails(id as string);
-    const downloadFileMutation = useFileDownload(id as string);
     useEffect(() => {
         if (isFetched && file) {
             setFileKey(file.url.split("/")[1]);
@@ -25,10 +24,6 @@ const FileDetails = () => {
 
     if (isLoading) return <CircularProgress />;
     if (error) return <div>Error loading file details</div>;
-
-    const handleDownload = () => {
-        downloadFileMutation.mutate(fileKey);
-    };
 
     return (
         <div>
@@ -39,14 +34,10 @@ const FileDetails = () => {
             <Typography variant='body1'>
                 Size: {ConvertBytesToKbs(file.size)} KB
             </Typography>
-            <Button onClick={handleDownload} disabled={!fileKey}>
-                View file
-            </Button>
+            
             <FileDisplay
-                isLoading={downloadFileMutation.isPending}
-                data={downloadFileMutation.data}
                 fileKey={fileKey}
-                error={downloadFileMutation.error}
+                fileId={id as string}
             />
         </div>
     );

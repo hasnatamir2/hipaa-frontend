@@ -1,55 +1,47 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import "@cyntler/react-doc-viewer/dist/index.css";
+import { useFileDownload } from "@/hooks/useFiles";
+import { Button } from "@mui/material";
 
 const FileDisplay = ({
     fileKey,
-    data,
-    isLoading,
-    error,
+    fileId,
 }: {
     fileKey: string;
-    data: any;
-    isLoading: boolean;
-    error: any;
+    fileId: string;
 }) => {
+    const { mutateAsync, error, isPending } = useFileDownload(fileId);
+
     const [fileUrl, setFileUrl] = useState<string | null>(null);
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const blob = new Blob([data], { type: "pdf" });
-                const url = URL.createObjectURL(blob);
-                setFileUrl(url);
-            } catch (error) {
-                console.error("Error fetching file:", error);
-            }
-        })();
-    }, [data]);
-
-    if (isLoading) {
-        return <p>Loading...</p>;
-    }
 
     if (error) {
         return <p>Error loading file</p>;
     }
 
-    if (!data) {
-        return <p>no data yet</p>;
-    }
-
-    if (!fileUrl) {
+    if (isPending) {
         return <div>Loading file...</div>;
     }
 
+    const handleDownloadClick = async () => {
+        const file = await mutateAsync(fileKey);
+        // const url = URL.createObjectURL(new Blob([file.data]));
+        setFileUrl(file);
+    };
+    console.log(fileUrl);
     return (
         <div>
+            <Button onClick={handleDownloadClick} disabled={!fileKey}>
+                View file
+            </Button>
             <h3>File Content</h3>
-            <DocViewer
-                documents={[{ uri: String(fileUrl) }]}
-                pluginRenderers={DocViewerRenderers}
-            />
+            {
+                fileUrl ? (
+                    <DocViewer documents={[{ uri: fileUrl }]} pluginRenderers={DocViewerRenderers} />
+                  ) : (
+                    <div>Loading file...</div>
+                  )
+            }
         </div>
     );
 };

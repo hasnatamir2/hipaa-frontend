@@ -1,0 +1,27 @@
+"use client";
+import axiosInstance from "@/utils/axios";
+
+export const getFoldersService = async () => {
+    const response = await axiosInstance.get("/folders");
+    return response.data;
+};
+
+export const createFolderService = async (body: any) => {
+    const response = await axiosInstance.post("/folders", body);
+    return response.data;
+};
+
+export const getFilesInFolderService = async (folderId: string) => {
+    const response = await axiosInstance.get(`/folders/${folderId}/files`);
+    return response.data;
+};
+
+export const updateFolderNameService = async (folderId: string, body: any) => {
+    const response = await axiosInstance.put(`/folders/${folderId}`, body);
+    return response.data;
+};
+
+export const deleteFolderService = async (folderId: string) => {
+    const response = await axiosInstance.delete(`/folders/${folderId}`);
+    return response.data;
+};
