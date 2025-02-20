@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import FolderList from "@/components/dashboard/folders/folder-list";
-import { Fab } from "@mui/material";
+import { Fab, Tooltip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import FolderForm from "@/components/dashboard/folders/folder-form-modal";
 import { useQueryClient } from "@tanstack/react-query";
@@ -18,7 +18,7 @@ export default function FoldersPage() {
         setOpen(false);
     };
 
-    const { mutate } = useCreateFolder({ onSuccess });
+    const { mutate, isPending } = useCreateFolder({ onSuccess });
 
     const onSubmit = (data: any) => {
         mutate(data);
@@ -30,15 +30,9 @@ export default function FoldersPage() {
                 open={open}
                 onClose={() => setOpen(!open)}
                 onSubmit={onSubmit}
+                isLoading={isPending}
+                mode="create"
             />
-            <Fab
-                color='primary'
-                aria-label='add'
-                sx={{ position: "fixed", bottom: "1.5rem", right: "1.5rem" }}
-                onClick={() => setOpen(true)}
-            >
-                <AddIcon />
-            </Fab>
         </div>
     );
 }

@@ -20,10 +20,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import FolderForm from "./folder-form-modal";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 const FolderList = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedFolder, setSelectedFolder] = useState({ id: "", name: "" });
+    const { push } = useRouter();
 
     const queryClient = useQueryClient();
     const refetchFolders = () => {
@@ -67,14 +69,15 @@ const FolderList = () => {
                     name: selectedFolder.name,
                 }}
                 onSubmit={updateFolder}
+                mode='edit'
             />
             <List style={{ maxHeight: 500, overflow: "scroll" }}>
                 {folders.map((folder: any) => {
                     return (
                         <ListItem
                             key={folder.id}
-                            // component={Link}
-                            // href={`/dashboard/folders/${folder.id}`}
+                            onClick={() => push(`/dashboard/folders/${folder.id}`)}
+                            sx={{ cursor: "pointer" }}
                             secondaryAction={
                                 <Box>
                                     <IconButton

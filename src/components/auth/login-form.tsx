@@ -8,6 +8,18 @@ import { AxiosError } from "axios";
 import { ACCESS_TOKEN, USER } from "@/constants/string";
 import Link from "next/link";
 import { IUserData } from "@/interfaces";
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    CircularProgress,
+    Container,
+    TextField,
+    Typography,
+    Alert,
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 interface FormData {
     email: string;
@@ -18,77 +30,137 @@ const LoginForm = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm<FormData>();
     const { push } = useRouter();
     const [error, setError] = useState<string>("");
+    const [showPassword, setShowPassword] = useState<boolean>(false);
 
-    const onSuccess = ({ access_token, user }: { access_token: string, user: IUserData }) => {
+    const onSuccess = ({
+        access_token,
+        user,
+    }: {
+        access_token: string;
+        user: IUserData;
+    }) => {
         localStorage.setItem(ACCESS_TOKEN, access_token);
-        localStorage.setItem(USER, JSON.stringify(user))
+        localStorage.setItem(USER, JSON.stringify(user));
         push("/");
     };
 
     const onError = (errorResponse: AxiosError) => {
         const data = errorResponse.response?.data as { message: string };
-        setError(data?.message);
+        setError(data?.message || "An unexpected error occurred");
     };
-    const {
-        mutate: login,
-        isPending,
-        isError,
-    } = useLogin({ onSuccess, onError });
-    const onSubmit = (data: FormData) => {
-        login(data);
+
+    const { mutate: login } = useLogin({ onSuccess, onError });
+
+    const onSubmit = async (data: FormData) => {
+        try {
+            login(data); // Trigger login mutation
+        } catch (error) {
+            console.error("Submission error:", error);
+            setError("Login failed, please try again."); // Handle unexpected errors
+        }
     };
 
     return (
-        <div className='w-full max-w-sm'>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <h2 className='text-2xl mb-4'>Login</h2>
-                <div className='mb-4'>
-                    <input
-                        type='email'
-                        placeholder='Email'
-                        {...register("email", {
-                            required: "Email is required",
-                        })}
-                        className='w-full p-2 border border-gray-300 rounded text-gray-700'
-                    />
-                    {errors.email && (
-                        <p className='text-red-500'>{errors.email.message}</p>
-                    )}
-                </div>
-                <div className='mb-4'>
-                    <input
-                        type='password'
-                        placeholder='Password'
-                        {...register("password", {
-                            required: "Password is required",
-                        })}
-                        className='w-full p-2 border border-gray-300 rounded text-gray-700'
-                    />
-                    {errors.password && (
-                        <p className='text-red-500'>
-                            {errors.password.message}
-                        </p>
-                    )}
-                </div>
-                {isError && error && <p className='text-red-500'>{error}</p>}
-                <button
-                    type='submit'
-                    className='w-full p-2 bg-blue-500 text-white rounded'
-                    disabled={isPending}
-                >
-                    Login
-                </button>
-            </form>
-            <div className='w-full mt-4 flex justify-end'>
-                <Link href='/auth/forget-password' className='text-sm hover:underline'>
-                    Forget password?
-                </Link>
-            </div>
-        </div>
+        <Container
+            maxWidth='sm'
+            sx={{
+                height: "100vh",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+            }}
+        >
+            <Card sx={{ width: "100%", p: 3, boxShadow: 3 }}>
+                <CardContent>
+                    <Typography variant='h4' align='center' gutterBottom>
+                        Login
+                    </Typography>
+                    <Box
+                        component='form'
+                        noValidate
+                        autoComplete='off'
+                        sx={{ mt: 2 }}
+                        onSubmit={handleSubmit(onSubmit)}
+                        
+                    >
+                        <TextField
+                            fullWidth
+                            label='Email'
+                            variant='outlined'
+                            margin='normal'
+                            {...register("email", {
+                                required: "Email is required",
+                                pattern: {
+                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                                    message: "Invalid email address",
+                                },
+                            })}
+                            error={!!errors.email}
+                            helperText={errors.email?.message}
+                        />
+                        <TextField
+                            fullWidth
+                            label='Password'
+                            type={showPassword ? "text" : "password"}
+                            variant='outlined'
+                            margin='normal'
+                            {...register("password", {
+                                required: "Password is required",
+                                minLength: {
+                                    value: 6,
+                                    message:
+                                        "Password should be at least 6 characters",
+                                },
+                            })}
+                            error={!!errors.password}
+                            helperText={errors.password?.message}
+                            InputProps={{
+                                endAdornment: showPassword ? (
+                                    <Visibility
+                                        onClick={() => setShowPassword(false)}
+                                    />
+                                ) : (
+                                    <VisibilityOff
+                                        onClick={() => setShowPassword(true)}
+                                    />
+                                ),
+                            }}
+                        />
+                        <Box sx={{ textAlign: "right", mt: 1 }}>
+                            <Link
+                                href='/auth/forget-password'
+                                className='text-sm hover:underline'
+                            >
+                                Forget password?
+                            </Link>
+                        </Box>
+                        {error && (
+                            <Alert severity='error' sx={{ mt: 2 }}>
+                                {error}
+                            </Alert>
+                        )}
+                        <Button
+                            fullWidth
+                            variant='contained'
+                            color='primary'
+                            sx={{ mt: 2 }}
+                            type='submit'
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting ? (
+                                <CircularProgress size={30} />
+                            ) : (
+                                "Login"
+                            )}
+                        </Button>
+                    </Box>
+                </CardContent>
+            </Card>
+        </Container>
     );
 };
 

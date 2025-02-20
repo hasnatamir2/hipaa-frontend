@@ -25,3 +25,8 @@ export const deleteFolderService = async (folderId: string) => {
     const response = await axiosInstance.delete(`/folders/${folderId}`);
     return response.data;
 };
+
+export const addFileToFolderService = async (folderId: string, fileId: any) => {
+    const response = await axiosInstance.post(`/folders/${folderId}/assign-file/${fileId}`);
+    return response.data;
+}

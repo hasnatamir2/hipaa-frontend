@@ -7,6 +7,7 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    CircularProgress,
 } from "@mui/material";
 
 const FolderForm = ({
@@ -14,6 +15,8 @@ const FolderForm = ({
     onClose,
     defaultValues,
     onSubmit,
+    mode = "create",
+    isLoading,
 }: {
     open: boolean;
     onClose: () => any;
@@ -21,6 +24,8 @@ const FolderForm = ({
     defaultValues?: {
         [key: string]: any;
     };
+    isLoading?: boolean;
+    mode?: "create" | "edit";
 }) => {
     const { register, handleSubmit, reset, getValues } = useForm({
         defaultValues,
@@ -33,7 +38,9 @@ const FolderForm = ({
 
     return (
         <Dialog open={open} onClose={onClose}>
-            <DialogTitle>Create Folder</DialogTitle>
+            <DialogTitle>
+                {mode === "edit" ? "Edit Folder" : "Create Folder"}
+            </DialogTitle>
             <DialogContent>
                 <form onSubmit={handleSubmit(handleFormSubmit)}>
                     <TextField
@@ -42,16 +49,27 @@ const FolderForm = ({
                         fullWidth
                         margin='normal'
                     />
-                    <Button type='submit' color='primary' variant='contained'>
-                        Create
-                    </Button>
+                    <DialogActions>
+                        {isLoading ? (
+                            <CircularProgress />
+                        ) : (
+                            <>
+                                <Button
+                                    type='submit'
+                                    color='primary'
+                                    variant='contained'
+                                    disabled={isLoading}
+                                >
+                                    {mode === "edit" ? "Update" : "Create"}
+                                </Button>
+                                <Button onClick={onClose} color='secondary'>
+                                    Cancel
+                                </Button>
+                            </>
+                        )}
+                    </DialogActions>
                 </form>
             </DialogContent>
-            <DialogActions>
-                <Button onClick={onClose} color='secondary'>
-                    Cancel
-                </Button>
-            </DialogActions>
         </Dialog>
     );
 };

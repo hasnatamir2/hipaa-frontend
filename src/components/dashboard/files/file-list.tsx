@@ -5,13 +5,13 @@ import {
     ListItemText,
     CircularProgress,
     ListItemButton,
-    Box,
     ListItemIcon,
 } from "@mui/material";
 import useFiles from "@/hooks/useFiles";
 import Link from "next/link";
 import { ConvertBytesToKbs } from "@/utils";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import FileListDetails from "./file-list-details";
 
 const FileList = () => {
     const { data: files, isLoading, error } = useFiles();
@@ -44,27 +44,6 @@ const FileList = () => {
                 );
             })}
         </List>
-    );
-};
-
-const FileListDetails = ({
-    lastModified,
-    size,
-}: {
-    lastModified: string;
-    size: number;
-}) => {
-    const lastModifiedDate = new Date(lastModified);
-
-    return (
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <span>
-                Last Modified: {lastModifiedDate.getDate()}/
-                {lastModifiedDate.getMonth() + 1}/
-                {lastModifiedDate.getFullYear()}
-            </span>
-            <span>Size: {ConvertBytesToKbs(size)} KB</span>
-        </Box>
     );
 };
 

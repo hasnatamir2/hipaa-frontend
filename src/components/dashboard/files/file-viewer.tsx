@@ -13,7 +13,10 @@ const FileDisplay = ({
 }) => {
     const { mutateAsync, error, isPending } = useFileDownload(fileId);
 
-    const [fileUrl, setFileUrl] = useState<string | null>(null);
+    const [fileUrl, setFileUrl] = useState<{ uri: string; fileType: string }>({
+        uri: "",
+        fileType: "",
+    });
 
     if (error) {
         return <p>Error loading file</p>;
@@ -25,23 +28,31 @@ const FileDisplay = ({
 
     const handleDownloadClick = async () => {
         const file = await mutateAsync(fileKey);
-        // const url = URL.createObjectURL(new Blob([file.data]));
-        setFileUrl(file);
+        const fileBlob = new Blob([file.data], {
+            type: file.headers["content-type"],
+        });
+
+        const fileToDisplay = {
+            uri: URL.createObjectURL(fileBlob),
+            fileType: file.headers["content-type"],
+        };
+
+        setFileUrl(fileToDisplay);
     };
-    console.log(fileUrl);
+
     return (
         <div>
-            <Button onClick={handleDownloadClick} disabled={!fileKey}>
-                View file
-            </Button>
             <h3>File Content</h3>
-            {
-                fileUrl ? (
-                    <DocViewer documents={[{ uri: fileUrl }]} pluginRenderers={DocViewerRenderers} />
-                  ) : (
-                    <div>Loading file...</div>
-                  )
-            }
+            {fileUrl.uri ? (
+                <DocViewer
+                    documents={[fileUrl]}
+                    pluginRenderers={DocViewerRenderers}
+                />
+            ) : (
+                <Button onClick={handleDownloadClick} disabled={!fileKey}>
+                    View file
+                </Button>
+            )}
         </div>
     );
 };

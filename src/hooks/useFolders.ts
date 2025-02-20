@@ -1,6 +1,7 @@
 "use client";
 
 import {
+    addFileToFolderService,
     createFolderService,
     deleteFolderService,
     getFilesInFolderService,
@@ -41,6 +42,15 @@ export const useDeleteFolder = ({ onSuccess }: any) => {
     return useMutation({
         mutationKey: ["delete-folder"],
         mutationFn: deleteFolderService,
+        onSuccess,
+    });
+};
+
+export const useAddFileToFolder = ({ onSuccess }: any) => {
+    return useMutation({
+        mutationKey: ["add-file-to-folder"],
+        mutationFn: (data: any) =>
+            addFileToFolderService(data.folderId, data.fileId),
         onSuccess,
     });
 };
