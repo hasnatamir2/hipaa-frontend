@@ -31,6 +31,7 @@ const FileList = () => {
 
     return (
         <ListGridView
+            title='My Files'
             data={modifiedFiles}
             isLoading={isLoading}
             icon={<InsertDriveFileIcon />}

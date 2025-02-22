@@ -13,7 +13,7 @@ import ListGridView from "@/components/list-grid-view";
 import { InsertDriveFile } from "@mui/icons-material";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import { useState } from "react";
-import UploadFileModal from "@/components/files/upload-file-modal";
+import UploadFileModal from "@/components/dashboard/files/upload-file-modal";
 import { useQueryClient } from "@tanstack/react-query";
 
 const FolderDetails = () => {

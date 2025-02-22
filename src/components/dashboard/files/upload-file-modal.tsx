@@ -83,7 +83,7 @@ const UploadFileModalWithDndProvider = ({
         if (isSuccess) {
             setFiles([]);
             setUploadedFiles([]);
-            onSuccessfulUpload();
+            onSuccessfulUpload?.();
             handleClose();
         }
     }, [isSuccess]);
@@ -188,9 +188,9 @@ const UploadFileModalWithDndProvider = ({
                     fullWidth
                     sx={{ marginTop: "8px" }}
                     onClick={handleFilesUpload}
-                    disabled={isPending}
+                    loading={isPending}
                 >
-                    {isPending ? <CircularProgress size={24} /> : "Upload"}
+                    Upload
                 </Button>
             </Box>
         </Modal>

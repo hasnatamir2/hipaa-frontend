@@ -62,14 +62,23 @@ const Sidebar: FC<{ open: boolean; toggleDrawer: () => void }> = ({
             icon: <InsertDriveFile />,
             path: "/dashboard/files",
         },
-        { text: "Logout", icon: <ExitToApp color="error" />, path: "/logout" },
+        {
+            text: "Logout",
+            icon: <ExitToApp color='error' />,
+            path: "",
+            onclick: onLogout,
+        },
     ];
 
     const handleMenuClick = (text: string) => {
         setOpenMenus({ ...openMenus, [text]: !openMenus[text] });
     };
 
-    const handleNavClick = (path: string) => {
+    const handleNavClick = (path: string, callBack?: any) => {
+        if(callBack) {
+            callBack();
+            return;
+        }
         push(path);
         toggleDrawer();
     };
@@ -140,7 +149,9 @@ const Sidebar: FC<{ open: boolean; toggleDrawer: () => void }> = ({
                         ) : (
                             <ListItemButton
                                 key={index}
-                                onClick={() => handleNavClick(item.path)}
+                                onClick={() =>
+                                    handleNavClick(item.path, item.onclick)
+                                }
                             >
                                 <ListItemIcon>{item.icon}</ListItemIcon>
                                 <ListItemText>{item.text}</ListItemText>

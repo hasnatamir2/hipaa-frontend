@@ -85,7 +85,6 @@ const LoginForm = () => {
                         autoComplete='off'
                         sx={{ mt: 2 }}
                         onSubmit={handleSubmit(onSubmit)}
-                        
                     >
                         <TextField
                             fullWidth
@@ -149,13 +148,9 @@ const LoginForm = () => {
                             color='primary'
                             sx={{ mt: 2 }}
                             type='submit'
-                            disabled={isSubmitting}
+                            loading={isSubmitting}
                         >
-                            {isSubmitting ? (
-                                <CircularProgress size={30} />
-                            ) : (
-                                "Login"
-                            )}
+                            Login
                         </Button>
                     </Box>
                 </CardContent>

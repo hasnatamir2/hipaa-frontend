@@ -36,6 +36,8 @@ interface ListGridViewProps {
     error?: any;
     icon: any;
     actions?: Array<Action>;
+    title?: string;
+    subTitle?: string;
 }
 
 const ListGridView = ({
@@ -44,6 +46,8 @@ const ListGridView = ({
     error,
     icon,
     actions,
+    title,
+    subTitle,
 }: ListGridViewProps) => {
     const [toggleView, setToggleView] = useState<"list" | "grid">("list");
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -90,7 +94,8 @@ const ListGridView = ({
                 alignItems='center'
                 marginBottom={2}
             >
-                <Typography variant='h6'>Files</Typography>
+                <Typography variant='h6'>{title}</Typography>
+                <Typography variant='body2'>{subTitle}</Typography>
                 <ToggleButtonGroup
                     exclusive
                     size='small'
@@ -143,7 +148,7 @@ const ListGridView = ({
                         ))}
                     </Grid2>
                 ) : (
-                    <List style={{ maxHeight: 500, overflow: "scroll" }}>
+                    <List style={{ maxHeight: '75dvh', overflow: "scroll" }}>
                         {data.map((item: any) => {
                             return (
                                 <ListItem

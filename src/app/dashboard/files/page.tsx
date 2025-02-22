@@ -1,4 +1,4 @@
-import FileList from "@/components/files/file-list";
+import FileList from "@/components/dashboard/files/file-list";
 
 export default function FilesPage() {
     return (

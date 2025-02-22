@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { CircularProgress, Container, Typography } from "@mui/material";
 import { useFileDetails } from "@/hooks/useFiles";
 import { BytesFormatter } from "@/utils";
-import FileDisplay from "@/components/files/file-viewer";
+import FileDisplay from "@/components/dashboard/files/file-viewer";
 
 const FileDetails = () => {
     const { id } = useParams();

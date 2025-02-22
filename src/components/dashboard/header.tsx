@@ -1,27 +1,42 @@
-'use client';
+"use client";
 
-import { AppBar, Toolbar, Typography, Button } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { AppBar, Toolbar, Typography, Button, IconButton } from "@mui/material";
+import UploadFileModal from "./files/upload-file-modal";
+import { useState } from "react";
+import { Menu, CloudUpload } from "@mui/icons-material";
 
-const Header = ({ user, onLogout }: any) => {
-    const router = useRouter();
-
-    const handleLogout = () => {
-        // Call your logout API or remove authentication token
-        onLogout();
-    };
+const Header = ({ user, handleDrawer }: any) => {
+    const [openUpload, setOpenUpload] = useState<boolean>(false);
 
     return (
-        <AppBar position='sticky'>
-            <Toolbar>
-                <Typography variant='h6' sx={{ flexGrow: 1 }}>
-                    Dashboard
-                </Typography>
-                <Button color='inherit' onClick={handleLogout}>
-                    Logout
-                </Button>
-            </Toolbar>
-        </AppBar>
+        <>
+            <AppBar position='fixed'>
+                <Toolbar>
+                    <IconButton
+                        edge='start'
+                        color='inherit'
+                        onClick={handleDrawer}
+                    >
+                        <Menu />
+                    </IconButton>
+                    <Typography variant='h6' sx={{ flexGrow: 1 }}>
+                        Hipaa - Dashboard
+                    </Typography>
+                    <Button
+                        color='inherit'
+                        aria-label='upload-file'
+                        onClick={() => setOpenUpload(true)}
+                        startIcon={<CloudUpload />}
+                    >
+                        Upload File
+                    </Button>
+                </Toolbar>
+            </AppBar>
+            <UploadFileModal
+                open={openUpload}
+                handleClose={() => setOpenUpload(false)}
+            />
+        </>
     );
 };
 

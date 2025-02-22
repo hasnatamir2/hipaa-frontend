@@ -1,15 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
-import { Menu } from "@mui/icons-material";
+import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
+import { Menu, Logout, CloudUpload } from "@mui/icons-material";
 
 import Sidebar from "./sidebar";
 import { useAuth } from "@/hooks/useAuth";
 import { UserRole } from "@/constants/roles";
+import Header from "./header";
 
 const DashboardLayout = ({ children }: any) => {
-    const { user } = useAuth();
+    const { user, onLogout } = useAuth();
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     if (user?.role !== UserRole.ADMIN) return null;
@@ -20,25 +21,10 @@ const DashboardLayout = ({ children }: any) => {
 
     return (
         <>
-            <AppBar position='fixed'>
-                <Toolbar>
-                    <IconButton
-                        edge='start'
-                        color='inherit'
-                        onClick={handleDrawer}
-                    >
-                        <Menu />
-                    </IconButton>
-                    <Typography variant='h6' sx={{ flexGrow: 1 }}>
-                        Hipaa - Dashboard
-                    </Typography>
-                </Toolbar>
-            </AppBar>
+            <Header handleDrawer={handleDrawer} />
 
             <Sidebar open={sidebarOpen} toggleDrawer={handleDrawer} />
-            <div style={{ marginTop: 64, padding: 16 }}>
-                {children}
-            </div>
+            <main style={{ marginTop: 64, padding: 16 }}>{children}</main>
         </>
     );
 };
