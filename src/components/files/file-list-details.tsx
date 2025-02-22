@@ -1,4 +1,4 @@
-import { ConvertBytesToKbs } from "@/utils";
+import { BytesFormatter } from "@/utils";
 import { Box } from "@mui/material";
 
 const FileListDetails = ({
@@ -17,7 +17,7 @@ const FileListDetails = ({
                 {lastModifiedDate.getMonth() + 1}/
                 {lastModifiedDate.getFullYear()}
             </span>
-            <span>Size: {ConvertBytesToKbs(size)} KB</span>
+            <span>Size: {BytesFormatter(size)} KB</span>
         </Box>
     );
 };

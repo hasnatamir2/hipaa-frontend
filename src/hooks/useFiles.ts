@@ -1,6 +1,12 @@
 "use client";
 
-import { downloadFileService, getFileDetailsService, getFilesService } from "@/services/files";
+import {
+    bulkUploadFilesService,
+    downloadFileService,
+    getFileDetailsService,
+    getFilesService,
+    uploadFileService,
+} from "@/services/files";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 const useFiles = () => {
@@ -9,17 +15,46 @@ const useFiles = () => {
 
 export const useFileDetails = (fileId: string) => {
     return useQuery({
-        queryKey: ['file', fileId],
+        queryKey: ["file", fileId],
         queryFn: () => getFileDetailsService(fileId),
-        enabled: !!fileId
-    })
-}
+        enabled: !!fileId,
+    });
+};
 
 export const useFileDownload = (fileId: string) => {
     return useMutation({
-        mutationKey: ['download-file', fileId],
+        mutationKey: ["download-file", fileId],
         mutationFn: (fileKey: string) => downloadFileService(fileKey),
-    })
-}
+    });
+};
+
+export const useFileUpload = () => {
+    return useMutation({
+        mutationKey: ["upload-file"],
+        mutationFn: ({ file, fileName, folderId }: any) =>
+            uploadFileService({
+                file,
+                fileName,
+                folderId,
+            }),
+    });
+};
+
+export const useBulkUploadFiles = () => {
+    return useMutation({
+        mutationKey: ["bulk-upload-files"],
+        mutationFn: ({
+            files,
+            folderId,
+        }: {
+            files: File[];
+            folderId?: string;
+        }) =>
+            bulkUploadFilesService({
+                files,
+                folderId,
+            }),
+    });
+};
 
 export default useFiles;

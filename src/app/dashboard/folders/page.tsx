@@ -31,8 +31,17 @@ export default function FoldersPage() {
                 onClose={() => setOpen(!open)}
                 onSubmit={onSubmit}
                 isLoading={isPending}
-                mode="create"
+                mode='create'
             />
+            <Tooltip title='Add File'>
+                <Fab
+                    color='primary'
+                    style={{ position: "fixed", bottom: 20, right: 20 }}
+                    onClick={() => setOpen(true)}
+                >
+                    <AddIcon />
+                </Fab>
+            </Tooltip>
         </div>
     );
 }

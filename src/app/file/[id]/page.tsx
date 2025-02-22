@@ -1,10 +1,10 @@
 "use client";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { CircularProgress, Typography } from "@mui/material";
-import { useFileDetails, useFileDownload } from "@/hooks/useFiles";
-import { ConvertBytesToKbs } from "@/utils";
-import FileDisplay from "@/components/dashboard/files/file-viewer";
+import { CircularProgress, Container, Typography } from "@mui/material";
+import { useFileDetails } from "@/hooks/useFiles";
+import { BytesFormatter } from "@/utils";
+import FileDisplay from "@/components/files/file-viewer";
 
 const FileDetails = () => {
     const { id } = useParams();
@@ -26,20 +26,17 @@ const FileDetails = () => {
     if (error) return <div>Error loading file details</div>;
 
     return (
-        <div>
+        <Container>
             <Typography variant='h5'>{file.name}</Typography>
             <Typography variant='body1'>
                 Uploaded by: {file.lastModified}
             </Typography>
             <Typography variant='body1'>
-                Size: {ConvertBytesToKbs(file.size)} KB
+                Size: {BytesFormatter(file.size)} KB
             </Typography>
-            
-            <FileDisplay
-                fileKey={fileKey}
-                fileId={id as string}
-            />
-        </div>
+
+            <FileDisplay fileKey={fileKey} fileId={id as string} />
+        </Container>
     );
 };
 

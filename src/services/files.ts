@@ -18,3 +18,52 @@ export const downloadFileService = async (fileKey: string) => {
 
     return response;
 };
+
+export const uploadFileService = async ({
+    file,
+    fileName,
+    folderId,
+}: {
+    file: File;
+    fileName: string;
+    folderId?: string;
+}) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("filename", fileName);
+    if (folderId) {
+        formData.append("folderId", folderId);
+    }
+
+    const response = await axiosInstance.post("/files/upload", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
+
+    return response.data;
+};
+
+export const bulkUploadFilesService = async ({
+    files,
+    folderId,
+}: {
+    files: File[];
+    folderId?: string;
+}) => {
+    const formData = new FormData();
+    Array.from(files).forEach((file) => {
+        formData.append("files", file); // 'files' must match the key in your NestJS API
+    });
+    if (folderId) {
+        formData.append("folderId", folderId);
+    }
+
+    const response = await axiosInstance.post("/files/bulk-upload", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
+
+    return response.data;
+};

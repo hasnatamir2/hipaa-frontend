@@ -104,7 +104,7 @@ const FolderList = () => {
                             </ListItemIcon>
                             <ListItemText
                                 primary={folder.name}
-                                secondary={""}
+                                secondary={`Total files# ${folder.totalFiles}`}
                             />
                         </ListItem>
                     );
