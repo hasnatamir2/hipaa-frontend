@@ -45,7 +45,7 @@ const LoginForm = () => {
     }) => {
         localStorage.setItem(ACCESS_TOKEN, access_token);
         localStorage.setItem(USER, JSON.stringify(user));
-        push("/");
+        push("/dashboard");
     };
 
     const onError = (errorResponse: AxiosError) => {
