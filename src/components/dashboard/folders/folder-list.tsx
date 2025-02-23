@@ -12,13 +12,13 @@ import {
 } from "@mui/material";
 import {
     useDeleteFolder,
-    useFolders,
+    useFoldersWithFiles,
     useUpdateFolderName,
 } from "@/hooks/useFolders";
 import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import FolderForm from "./folder-form-modal";
+import FolderForm from "../../library/modals/folder-form-modal";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
@@ -33,7 +33,7 @@ const FolderList = () => {
             queryKey: ["folders"],
         });
     };
-    const { data: folders, isLoading, error } = useFolders();
+    const { data: folders, isLoading, error } = useFoldersWithFiles();
     const { mutate: deleteMutation } = useDeleteFolder({
         onSuccess: refetchFolders,
     });
@@ -76,7 +76,9 @@ const FolderList = () => {
                     return (
                         <ListItem
                             key={folder.id}
-                            onClick={() => push(`/dashboard/folders/${folder.id}`)}
+                            onClick={() =>
+                                push(`/dashboard/folders/${folder.id}`)
+                            }
                             sx={{ cursor: "pointer" }}
                             secondaryAction={
                                 <Box>

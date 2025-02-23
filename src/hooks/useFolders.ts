@@ -6,12 +6,20 @@ import {
     deleteFolderService,
     getFilesInFolderService,
     getFoldersService,
+    getFoldersWithFilesService,
     updateFolderNameService,
 } from "@/services/folders";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useFolders = () => {
     return useQuery({ queryKey: ["folders"], queryFn: getFoldersService });
+};
+
+export const useFoldersWithFiles = () => {
+    return useQuery({
+        queryKey: ["folders-with-files"],
+        queryFn: getFoldersWithFilesService,
+    });
 };
 
 export const useCreateFolder = ({ onSuccess }: any) => {
@@ -22,7 +30,7 @@ export const useCreateFolder = ({ onSuccess }: any) => {
     });
 };
 
-export const useFilesInFolder = (folderId: string) => {
+export const useFilesInFolder = (folderId?: string) => {
     return useQuery({
         queryKey: ["files-in-folder", folderId],
         queryFn: () => getFilesInFolderService(folderId),

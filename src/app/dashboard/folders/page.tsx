@@ -4,7 +4,7 @@ import { useState } from "react";
 import FolderList from "@/components/dashboard/folders/folder-list";
 import { Fab, Tooltip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import FolderForm from "@/components/dashboard/folders/folder-form-modal";
+import FolderForm from "@/components/library/modals/folder-form-modal";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateFolder } from "@/hooks/useFolders";
 

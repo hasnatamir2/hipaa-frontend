@@ -1,8 +1,8 @@
 "use client";
 import { useParams } from "next/navigation";
 import {
-    Box,
     CircularProgress,
+    Container,
     Fab,
     List,
     Tooltip,
@@ -13,7 +13,7 @@ import ListGridView from "@/components/list-grid-view";
 import { InsertDriveFile } from "@mui/icons-material";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import { useState } from "react";
-import UploadFileModal from "@/components/dashboard/files/upload-file-modal";
+import UploadFileModal from "@/components/library/modals/upload-file-modal";
 import { useQueryClient } from "@tanstack/react-query";
 
 const FolderDetails = () => {
@@ -39,21 +39,15 @@ const FolderDetails = () => {
     };
 
     return (
-        <div>
-            <Typography variant='h4'>Folder: {folderDetails.name}</Typography>
-            <Typography variant='h6' style={{ marginTop: "20px" }}>
-                Files: ({folderDetails.files.length})
-            </Typography>
+        <Container>
+            <Typography variant='h4'>{folderDetails.name}</Typography>
             <List>
-                {folderDetails.files.length ? (
-                    <ListGridView
-                        data={folderDetails.files}
-                        isLoading={isLoading}
-                        icon={<InsertDriveFile />}
-                    />
-                ) : (
-                    <Typography>No files in this folder</Typography>
-                )}
+                <ListGridView
+                    data={folderDetails.files}
+                    isLoading={isLoading}
+                    icon={<InsertDriveFile />}
+                    title={`Files: (${folderDetails.files.length})`}
+                />
             </List>
             <UploadFileModal
                 open={openUpload}
@@ -70,7 +64,7 @@ const FolderDetails = () => {
                     <NoteAddIcon />
                 </Fab>
             </Tooltip>
-        </div>
+        </Container>
     );
 };
 

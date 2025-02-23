@@ -6,12 +6,17 @@ export const getFoldersService = async () => {
     return response.data;
 };
 
+export const getFoldersWithFilesService = async () => {
+    const response = await axiosInstance.get("/folders/folders-with-files");
+    return response.data;
+};
+
 export const createFolderService = async (body: any) => {
     const response = await axiosInstance.post("/folders", body);
     return response.data;
 };
 
-export const getFilesInFolderService = async (folderId: string) => {
+export const getFilesInFolderService = async (folderId?: string) => {
     const response = await axiosInstance.get(`/folders/${folderId}/files`);
     return response.data;
 };

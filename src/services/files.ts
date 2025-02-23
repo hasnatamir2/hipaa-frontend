@@ -67,3 +67,8 @@ export const bulkUploadFilesService = async ({
 
     return response.data;
 };
+
+export const deleteFileService = async (fileId: string) => {
+    const response = await axiosInstance.delete(`/files/${fileId}`);
+    return response.data;
+};

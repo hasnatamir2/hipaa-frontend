@@ -2,6 +2,7 @@
 
 import {
     bulkUploadFilesService,
+    deleteFileService,
     downloadFileService,
     getFileDetailsService,
     getFilesService,
@@ -9,7 +10,7 @@ import {
 } from "@/services/files";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
-const useFiles = () => {
+export const useFiles = () => {
     return useQuery({ queryKey: ["files"], queryFn: getFilesService });
 };
 
@@ -18,6 +19,7 @@ export const useFileDetails = (fileId: string) => {
         queryKey: ["file", fileId],
         queryFn: () => getFileDetailsService(fileId),
         enabled: !!fileId,
+        retry: 1
     });
 };
 
@@ -56,5 +58,13 @@ export const useBulkUploadFiles = () => {
             }),
     });
 };
+
+export const useDeleteFile = ({ onSuccess }: any) => {
+    return useMutation({
+        mutationKey: ["delete-file"],
+        mutationFn: (fileId: string) => deleteFileService(fileId),
+        onSuccess,
+    });
+}
 
 export default useFiles;

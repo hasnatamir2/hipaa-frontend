@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation";
 
 interface Action {
     label: string;
+    disabled?: boolean;
     onClick: (action: string, id: string) => void;
 }
 interface ListGridViewProps {
@@ -85,6 +86,10 @@ const ListGridView = ({
         handleMenuClose();
     };
 
+    if (data.length === 0) {
+        return <Typography>No data available</Typography>;
+    }
+
     return (
         <Container>
             <Box
@@ -134,34 +139,39 @@ const ListGridView = ({
                                         </CardContent>
                                     </CardActionArea>
                                     <CardActions>
-                                        <IconButton
-                                            onClick={(e) =>
-                                                handleMenuOpen(e, item.id)
-                                            }
-                                            style={{}}
-                                        >
-                                            <MoreVert />
-                                        </IconButton>
+                                        {actions && actions?.length > 0 && (
+                                            <IconButton
+                                                onClick={(e) =>
+                                                    handleMenuOpen(e, item.id)
+                                                }
+                                                style={{}}
+                                            >
+                                                <MoreVert />
+                                            </IconButton>
+                                        )}
                                     </CardActions>
                                 </Card>
                             </Grid2>
                         ))}
                     </Grid2>
                 ) : (
-                    <List style={{ maxHeight: '75dvh', overflow: "scroll" }}>
+                    <List style={{ maxHeight: "75dvh", overflow: "scroll" }}>
                         {data.map((item: any) => {
                             return (
                                 <ListItem
                                     divider
                                     key={item.id}
                                     secondaryAction={
-                                        <IconButton
-                                            onClick={(e: any) =>
-                                                handleMenuOpen(e, item.id)
-                                            }
-                                        >
-                                            <MoreVert />
-                                        </IconButton>
+                                        actions &&
+                                        actions?.length > 0 && (
+                                            <IconButton
+                                                onClick={(e: any) =>
+                                                    handleMenuOpen(e, item.id)
+                                                }
+                                            >
+                                                <MoreVert />
+                                            </IconButton>
+                                        )
                                     }
                                     sx={{ cursor: "pointer" }}
                                 >
@@ -188,6 +198,7 @@ const ListGridView = ({
             >
                 {actions?.map((action: any, index: number) => (
                     <MenuItem
+                        disabled={action.disabled}
                         onClick={() =>
                             handleActionClick(action.label, action.onClick)
                         }

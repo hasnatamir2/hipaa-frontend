@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Box,
-    Modal,
     Typography,
     Button,
     List,
@@ -9,27 +8,18 @@ import {
     ListItemText,
     ListItemAvatar,
     IconButton,
-    CircularProgress,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
 } from "@mui/material";
 import Dropzone from "@/components/library/dropzone";
 import { BytesFormatter, fileToBase64 } from "@/utils";
 import CloseIcon from "@mui/icons-material/Close";
 import { useBulkUploadFiles } from "@/hooks/useFiles";
 
-// Custom styles for the modal
-const modalStyle = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-};
 
-const UploadFileModalWithDndProvider = ({
+const UploadFileModal = ({
     open,
     handleClose,
     folderId,
@@ -89,13 +79,9 @@ const UploadFileModalWithDndProvider = ({
     }, [isSuccess]);
 
     return (
-        <Modal open={open} onClose={handleClose}>
-            <Box sx={modalStyle}>
-                <Typography variant='h6' component='h2' gutterBottom>
-                    Upload Files
-                </Typography>
-
-                {/* Drag-and-drop area */}
+        <Dialog open={open} onClose={handleClose}>
+            <DialogTitle> Upload Files</DialogTitle>
+            <DialogContent>
                 <Dropzone
                     onUpload={handleUpload}
                     styles={{
@@ -118,8 +104,11 @@ const UploadFileModalWithDndProvider = ({
                             margin: 2,
                         }}
                     >
-                        <Typography variant='body2'>
+                        <Typography variant='body1'>
                             Drag & Drop files here or Click to Browse
+                        </Typography>
+                        <Typography variant='body2'>
+                            Acceptable formats: jpg, jpeg, png, gif, pdf
                         </Typography>
 
                         <label htmlFor='file-upload-input'>
@@ -182,6 +171,8 @@ const UploadFileModalWithDndProvider = ({
                         ))}
                     </List>
                 )}
+            </DialogContent>
+            <DialogActions>
                 <Button
                     variant='contained'
                     component='span'
@@ -192,9 +183,9 @@ const UploadFileModalWithDndProvider = ({
                 >
                     Upload
                 </Button>
-            </Box>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 };
 
-export default UploadFileModalWithDndProvider;
+export default UploadFileModal;

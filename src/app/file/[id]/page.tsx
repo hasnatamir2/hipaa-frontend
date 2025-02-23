@@ -22,8 +22,14 @@ const FileDetails = () => {
         }
     }, [isFetched, file]);
 
+    if (error && (error as any)?.status === 403)
+        return (
+            <Typography variant='h5'>
+                You do not have access to this file
+            </Typography>
+        );
+    if (error) return <Typography>Error loading file details</Typography>;
     if (isLoading) return <CircularProgress />;
-    if (error) return <div>Error loading file details</div>;
 
     return (
         <Container>

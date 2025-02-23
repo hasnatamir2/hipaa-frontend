@@ -10,10 +10,10 @@ import { UserRole } from "@/constants/roles";
 import Header from "./header";
 
 const DashboardLayout = ({ children }: any) => {
-    const { user, onLogout } = useAuth();
+    const { user } = useAuth();
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    if (user?.role !== UserRole.ADMIN) return null;
+    // if (user?.role !== UserRole.ADMIN) return null;
 
     const handleDrawer = () => {
         setSidebarOpen(!sidebarOpen);
@@ -21,7 +21,7 @@ const DashboardLayout = ({ children }: any) => {
 
     return (
         <>
-            <Header handleDrawer={handleDrawer} />
+            <Header handleDrawer={handleDrawer} user={user} />
 
             <Sidebar open={sidebarOpen} toggleDrawer={handleDrawer} />
             <main style={{ marginTop: 64, padding: 16 }}>{children}</main>
