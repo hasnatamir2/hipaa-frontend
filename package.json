@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "next start -p 8080",
+    "start": "next start",
+    "heroku-postbuild": "next build",
     "lint": "next lint"
   },
   "dependencies": {

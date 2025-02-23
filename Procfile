@@ -1,1 +1,1 @@
-web: next start -p 8080
+web: next start -p $PORT
