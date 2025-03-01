@@ -11,6 +11,11 @@ export const getFoldersWithFilesService = async () => {
     return response.data;
 };
 
+export const getFoldersAccessibleWithGroupService = async () => {
+    const response = await axiosInstance.get("/folders/folders-with-files");
+    return response.data;
+};
+
 export const createFolderService = async (body: any) => {
     const response = await axiosInstance.post("/folders", body);
     return response.data;
@@ -32,6 +37,19 @@ export const deleteFolderService = async (folderId: string) => {
 };
 
 export const addFileToFolderService = async (folderId: string, fileId: any) => {
-    const response = await axiosInstance.post(`/folders/${folderId}/assign-file/${fileId}`);
+    const response = await axiosInstance.post(
+        `/folders/${folderId}/assign-file/${fileId}`
+    );
     return response.data;
-}
+};
+
+export const getAllFolders = async () => {
+    const response = await axiosInstance.get(`/folders/all`);
+    return response.data;
+};
+
+// Fetch folders accessible by the current user's groups.
+export const getFoldersAccessible = async () => {
+    const response = await axiosInstance.get(`/folders/accessible`);
+    return response.data;
+};

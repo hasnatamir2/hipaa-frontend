@@ -1,4 +1,4 @@
-
+"use client";
 import { Box, Typography, Card, CardContent, Grid2 } from "@mui/material";
 import { FC } from "react";
 

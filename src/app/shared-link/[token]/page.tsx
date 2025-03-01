@@ -85,5 +85,5 @@ export default function SharedLink() {
         );
     }
 
-    return <Container>{isPending && <CircularProgress size={24} />}</Container>;
+    return <Container>{isPending && <CircularProgress />}</Container>;
 }

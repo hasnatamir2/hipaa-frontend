@@ -13,7 +13,7 @@ export default function FoldersPage() {
     const queryClient = useQueryClient();
     const onSuccess = () => {
         queryClient.invalidateQueries({
-            queryKey: ["folders"],
+            queryKey: ["get-folders-accessible"],
         });
         setOpen(false);
     };

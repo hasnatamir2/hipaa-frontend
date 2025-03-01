@@ -23,6 +23,7 @@ import {
     ExitToApp,
     ExpandLess,
     ExpandMore,
+    Groups,
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -56,6 +57,7 @@ const Sidebar: FC<{ open: boolean; toggleDrawer: () => void }> = ({
                 },
             ],
         },
+        { text: "User Group", icon: <Groups />, path: "/dashboard/user-group" },
         { text: "Folders", icon: <Folder />, path: "/dashboard/folders" },
         {
             text: "My Files",

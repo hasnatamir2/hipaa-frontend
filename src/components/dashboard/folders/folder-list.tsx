@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import {
     useDeleteFolder,
+    useFoldersAccessible,
     useFoldersWithFiles,
     useUpdateFolderName,
 } from "@/hooks/useFolders";
@@ -30,10 +31,10 @@ const FolderList = () => {
     const queryClient = useQueryClient();
     const refetchFolders = () => {
         queryClient.invalidateQueries({
-            queryKey: ["folders"],
+            queryKey: ["get-folders-accessible"],
         });
     };
-    const { data: folders, isLoading, error } = useFoldersWithFiles();
+    const { data: folders, isLoading, error } = useFoldersAccessible();
     const { mutate: deleteMutation } = useDeleteFolder({
         onSuccess: refetchFolders,
     });

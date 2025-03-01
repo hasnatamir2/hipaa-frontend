@@ -8,6 +8,8 @@ import {
     getFoldersService,
     getFoldersWithFilesService,
     updateFolderNameService,
+    getAllFolders,
+    getFoldersAccessible
 } from "@/services/folders";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -62,3 +64,17 @@ export const useAddFileToFolder = ({ onSuccess }: any) => {
         onSuccess,
     });
 };
+
+export const useAllFolders = () => {
+    return useQuery({
+        queryKey: ['get-all-folders'],
+        queryFn: getAllFolders
+    })
+}
+
+export const useFoldersAccessible = () => {
+    return useQuery({
+        queryKey: ['get-folders-accessible'],
+        queryFn: getFoldersAccessible
+    })
+}

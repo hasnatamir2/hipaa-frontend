@@ -27,7 +27,12 @@ const FolderForm = ({
     isLoading?: boolean;
     mode?: "create" | "edit";
 }) => {
-    const { register, handleSubmit, reset, getValues } = useForm({
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm<{ name: string }>({
         defaultValues,
     });
 
@@ -37,17 +42,21 @@ const FolderForm = ({
     };
 
     return (
-        <Dialog open={open} onClose={onClose}>
+        <Dialog open={open} onClose={onClose} fullWidth maxWidth='sm'>
             <DialogTitle>
                 {mode === "edit" ? "Edit Folder" : "Create Folder"}
             </DialogTitle>
             <DialogContent>
                 <form onSubmit={handleSubmit(handleFormSubmit)}>
                     <TextField
-                        {...register("name")}
+                        {...register("name", {
+                            required: "Folder name is required",
+                        })}
                         label='Folder Name'
                         fullWidth
                         margin='normal'
+                        error={!!errors.name}
+                        helperText={errors.name?.message}
                     />
                     <DialogActions>
                         {isLoading ? (
@@ -62,9 +71,7 @@ const FolderForm = ({
                                 >
                                     {mode === "edit" ? "Update" : "Create"}
                                 </Button>
-                                <Button onClick={onClose} color='secondary'>
-                                    Cancel
-                                </Button>
+                                <Button onClick={onClose}>Cancel</Button>
                             </>
                         )}
                     </DialogActions>
