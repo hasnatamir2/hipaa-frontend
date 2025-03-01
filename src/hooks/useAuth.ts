@@ -29,7 +29,7 @@ export const useLogin = ({ onSuccess, onError }: any) => {
 export const useAuth = () => {
     const [user, setUser] = useState<IUserData | null>(null);
     const router = useRouter();
-    const storedUser = localStorage.getItem(USER);
+    const storedUser = typeof window !== 'undefined' && localStorage.getItem(USER);
 
     useEffect(() => {
         // Simulate fetching user from an API or localStorage
