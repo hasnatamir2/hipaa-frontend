@@ -29,17 +29,18 @@ export const useLogin = ({ onSuccess, onError }: any) => {
 export const useAuth = () => {
     const [user, setUser] = useState<IUserData | null>(null);
     const router = useRouter();
+    const storedUser = localStorage.getItem(USER);
 
     useEffect(() => {
         // Simulate fetching user from an API or localStorage
-        const storedUser = localStorage.getItem(USER);
         if (storedUser) {
             setUser(JSON.parse(storedUser));
         } else {
             router.push("/auth/login"); // Redirect if no user found
         }
-    }, []);
+    }, [storedUser]);
 
+    
     const onLogout = () => {
         // Remove user data from localStorage and redirect to login
         localStorage.removeItem(USER);

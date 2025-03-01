@@ -30,6 +30,19 @@ import Link from "next/link";
 import { DRAWER_WIDTH } from "@/constants/string";
 import { useAuth } from "@/hooks/useAuth";
 
+interface ISidebarMenu {
+    text: string;
+    icon: any;
+    path: string;
+    onclick?: any;
+    subItems?: {
+        text: string;
+        icon: any;
+        path: string;
+        onclick?: any;
+    };
+}
+
 const Sidebar: FC<{ open: boolean; toggleDrawer: () => void }> = ({
     open,
     toggleDrawer,
@@ -38,24 +51,12 @@ const Sidebar: FC<{ open: boolean; toggleDrawer: () => void }> = ({
     const { push } = useRouter();
     const { onLogout } = useAuth();
 
-    const menuItems = [
+    const menuItems: ISidebarMenu[] = [
         { text: "Dashboard", icon: <Dashboard />, path: "/dashboard" },
         {
-            text: "Users",
+            text: "Manage Users",
             icon: <Group />,
-            path: "",
-            subItems: [
-                {
-                    text: "List User",
-                    icon: <PersonAdd />,
-                    path: "/dashboard/users",
-                },
-                {
-                    text: "Create User",
-                    icon: <PersonAdd />,
-                    path: "/dashboard/users/create-user",
-                },
-            ],
+            path: "/dashboard/users",
         },
         { text: "User Group", icon: <Groups />, path: "/dashboard/user-group" },
         { text: "Folders", icon: <Folder />, path: "/dashboard/folders" },
@@ -77,7 +78,7 @@ const Sidebar: FC<{ open: boolean; toggleDrawer: () => void }> = ({
     };
 
     const handleNavClick = (path: string, callBack?: any) => {
-        if(callBack) {
+        if (callBack) {
             callBack();
             return;
         }
@@ -129,7 +130,7 @@ const Sidebar: FC<{ open: boolean; toggleDrawer: () => void }> = ({
                                     unmountOnExit
                                 >
                                     <List component='div' disablePadding>
-                                        {item.subItems.map((subItem, index) => (
+                                        {item.subItems?.map((subItem: any, index) => (
                                             <ListItemButton
                                                 key={index}
                                                 sx={{ pl: 4 }}

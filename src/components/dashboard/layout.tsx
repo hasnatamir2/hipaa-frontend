@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { redirect } from "next/navigation";
 
 import Sidebar from "./sidebar";
 import { useAuth } from "@/hooks/useAuth";
@@ -10,7 +9,6 @@ import Header from "./header";
 const DashboardLayout = ({ children }: any) => {
     const { user } = useAuth();
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    console.log(user)
     // if (!user) return redirect('/auth/login');
 
     const handleDrawer = () => {

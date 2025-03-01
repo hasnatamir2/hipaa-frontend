@@ -77,7 +77,7 @@ export default function SharedLink() {
 
     if (isSuccess && data.file) {
         const fileId = data?.file?.id;
-        push(`/file/${fileId}`);
+        push(`/dashboard/files/${fileId}`);
         return (
             <Container>
                 <Typography variant='h4'>Redirecting...</Typography>

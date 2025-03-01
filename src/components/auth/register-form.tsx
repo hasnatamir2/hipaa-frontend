@@ -1,97 +1,216 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import axios from "@/utils/axios";
+import {
+    Box,
+    Button,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    FormControl,
+    FormHelperText,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField,
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { UserRole } from "@/constants/roles";
+import { useRegisterUser, useUpdateRole } from "@/hooks/useUsers";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface RegisterFormInputs {
     email: string;
-    password: string;
-    confirmPassword: string;
+    password?: string;
+    confirmPassword?: string;
+    role: UserRole;
 }
 
-const RegisterForm = () => {
+const RegisterForm = ({
+    selectedUser,
+    open,
+    onClose,
+}: {
+    selectedUser?: any;
+    open: boolean;
+    onClose: any;
+}) => {
     const {
         register,
         handleSubmit,
         formState: { errors },
         watch,
+        setValue,
+        reset,
     } = useForm<RegisterFormInputs>();
-    const router = useRouter();
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const queryClient = useQueryClient();
+
+    const onSuccess = () => {
+        queryClient.invalidateQueries({ queryKey: ["get-all-users"] });
+        reset();
+        onClose();
+    };
+
+    const { mutate } = useRegisterUser({ onSuccess });
+    const { mutate: updateRole } = useUpdateRole({ onSuccess });
+
+    useEffect(() => {
+        if (selectedUser) {
+            setValue("email", selectedUser.email);
+            setValue("role", selectedUser.role);
+            setValue("password", "123456");
+            setValue("confirmPassword", "123456");
+        }
+    }, [selectedUser]);
 
     const onSubmit = async (data: RegisterFormInputs) => {
-        if (data.password !== data.confirmPassword) {
-            return alert("Passwords do not match");
-        }
-
-        try {
-            await axios.post("/auth/register", {
+        if (!selectedUser) {
+            mutate({
                 email: data.email,
                 password: data.password,
+                role: data.role,
             });
-
-            router.push("/login");
-        } catch (error: any) {
-            console.error(
-                "Registration error",
-                error.response?.data?.message || error.message
-            );
+        } else {
+            updateRole({
+                id: selectedUser.id,
+                role: data.role,
+            });
         }
     };
 
+    const roles = [
+        {
+            label: "Admin",
+            value: UserRole.ADMIN,
+        },
+        {
+            label: "Health Professional",
+            value: UserRole.HEALTH_PROFESSIONAL,
+        },
+        {
+            label: "Standard User",
+            value: UserRole.STANDARD_USER,
+        },
+    ];
+
+    const password = watch("password");
+
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className='w-full max-w-sm'>
-            <h2 className='text-2xl mb-4'>Register</h2>
-            <div className='mb-4'>
-                <input
-                    type='email'
-                    placeholder='Email'
-                    {...register("email", { required: "Email is required" })}
-                    className='w-full p-2 border border-gray-300 rounded text-gray-700'
-                />
-                {errors.email && (
-                    <p className='text-red-500'>{errors.email.message}</p>
-                )}
-            </div>
-            <div className='mb-4'>
-                <input
-                    type='password'
-                    placeholder='Password'
-                    {...register("password", {
-                        required: "Password is required",
-                        minLength: {
-                            value: 6,
-                            message: "Password must be at least 6 characters",
-                        },
-                    })}
-                    className='w-full p-2 border border-gray-300 rounded text-gray-700'
-                />
-                {errors.password && (
-                    <p className='text-red-500'>{errors.password.message}</p>
-                )}
-            </div>
-            <div className='mb-4'>
-                <input
-                    type='password'
-                    placeholder='Confirm Password'
-                    {...register("confirmPassword", {
-                        required: "Please confirm your password",
-                    })}
-                    className='w-full p-2 border border-gray-300 rounded text-gray-700'
-                />
-                {errors.confirmPassword && (
-                    <p className='text-red-500'>
-                        {errors.confirmPassword.message}
-                    </p>
-                )}
-            </div>
-            <button
-                type='submit'
-                className='w-full p-2 bg-blue-500 text-white rounded'
-            >
-                Register
-            </button>
-        </form>
+        <Dialog open={open} fullWidth maxWidth='sm' onClose={onClose}>
+            <DialogTitle>
+                {selectedUser?.id ? "Edit User" : "Add User"}
+            </DialogTitle>
+            <DialogContent>
+                <Box component='form' onSubmit={handleSubmit(onSubmit)}>
+                    <TextField
+                        fullWidth
+                        label='Email'
+                        variant='outlined'
+                        margin='normal'
+                        {...register("email", {
+                            required: "Email is required",
+                            pattern: {
+                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                                message: "Invalid email address",
+                            },
+                        })}
+                        error={!!errors.email}
+                        helperText={errors.email?.message}
+                    />
+                    <TextField
+                        fullWidth
+                        label='Password'
+                        type={showPassword ? "text" : "password"}
+                        variant='outlined'
+                        margin='normal'
+                        disabled={selectedUser.id}
+                        {...register("password", {
+                            required:
+                                !selectedUser?.id && "Password is required",
+                            minLength: {
+                                value: 6,
+                                message:
+                                    "Password should be at least 6 characters",
+                            },
+                        })}
+                        error={!!errors.password}
+                        helperText={errors.password?.message}
+                        InputProps={{
+                            endAdornment: showPassword ? (
+                                <Visibility
+                                    onClick={() => setShowPassword(false)}
+                                />
+                            ) : (
+                                <VisibilityOff
+                                    onClick={() => setShowPassword(true)}
+                                />
+                            ),
+                        }}
+                    />
+                    <TextField
+                        fullWidth
+                        label='Confirm Password'
+                        type={showPassword ? "text" : "password"}
+                        variant='outlined'
+                        margin='normal'
+                        disabled={selectedUser.id}
+                        {...register("confirmPassword", {
+                            required:
+                                !selectedUser?.id &&
+                                "Please confirm your password",
+                            validate: (value) =>
+                                value === password || "Passwords do not match",
+                        })}
+                        error={!!errors.confirmPassword}
+                        helperText={errors.confirmPassword?.message}
+                        InputProps={{
+                            endAdornment: showPassword ? (
+                                <Visibility
+                                    onClick={() => setShowPassword(false)}
+                                />
+                            ) : (
+                                <VisibilityOff
+                                    onClick={() => setShowPassword(true)}
+                                />
+                            ),
+                        }}
+                    />
+                    <FormControl
+                        fullWidth
+                        margin='normal'
+                        error={!!errors.role}
+                    >
+                        <InputLabel id='role-label'>Role</InputLabel>
+                        <Select
+                            labelId='role-label'
+                            label='Role'
+                            {...register("role", {
+                                required: "Role is required",
+                            })}
+                        >
+                            {roles.map((role: any) => (
+                                <MenuItem value={role.value} key={role.value}>
+                                    {role.label}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                        <FormHelperText id='role-label'>
+                            {errors.role?.message}
+                        </FormHelperText>
+                    </FormControl>
+                    <Button
+                        type='submit'
+                        fullWidth
+                        variant='contained'
+                        sx={{ marginTop: 1.5 }}
+                    >
+                        Save
+                    </Button>
+                </Box>
+            </DialogContent>
+        </Dialog>
     );
 };
 

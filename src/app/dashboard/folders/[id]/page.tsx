@@ -15,6 +15,7 @@ import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import { useState } from "react";
 import UploadFileModal from "@/components/library/modals/upload-file-modal";
 import { useQueryClient } from "@tanstack/react-query";
+import { generateFileMetadata } from "@/utils";
 
 const FolderDetails = () => {
     const { id } = useParams();
@@ -38,12 +39,20 @@ const FolderDetails = () => {
         });
     };
 
+    const modifiedFolders = folderDetails?.files?.map((file: any) => {
+        return {
+            ...file,
+            secondaryContent: generateFileMetadata(file),
+            link: `/dashboard/files/${file.id}`,
+        };
+    });
+
     return (
         <Container>
             <Typography variant='h4'>{folderDetails.name}</Typography>
             <List>
                 <ListGridView
-                    data={folderDetails.files}
+                    data={modifiedFolders}
                     isLoading={isLoading}
                     icon={<InsertDriveFile />}
                     title={`Files: (${folderDetails.files.length})`}

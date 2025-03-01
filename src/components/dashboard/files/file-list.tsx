@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import { CircularProgress } from "@mui/material";
-import { format } from "date-fns";
 import useFiles, { useDeleteFile } from "@/hooks/useFiles";
-import { BytesFormatter } from "@/utils";
+import { generateFileMetadata } from "@/utils";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import ListGridView from "@/components/list-grid-view";
 import AssignFileToFolderModal from "../../library/modals/assign-file-to-folder-modal";
@@ -32,22 +31,12 @@ const FileList = () => {
     if (isLoading) return <CircularProgress />;
     if (error) return <div>Error loading files</div>;
 
-    const generateFileMetadata = (file: any) => {
-        const lastModifiedDateTime = format(
-            file.lastModified,
-            "yyyy/MM/dd hh:mm a"
-        );
-
-        return `Last Modified: ${lastModifiedDateTime}, Size: ${BytesFormatter(
-            file.size
-        )}`;
-    };
 
     const modifiedFiles = files.map((file: any) => {
         return {
             ...file,
             secondaryContent: generateFileMetadata(file),
-            link: `/file/${file.id}`,
+            link: `/dashboard/files/${file.id}`,
         };
     });
 

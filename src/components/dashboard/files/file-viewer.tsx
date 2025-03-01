@@ -2,7 +2,7 @@ import { useState } from "react";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import "@cyntler/react-doc-viewer/dist/index.css";
 import { useFileDownload } from "@/hooks/useFiles";
-import { Button } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 
 const FileDisplay = ({
     fileKey,
@@ -19,11 +19,11 @@ const FileDisplay = ({
     });
 
     if (error) {
-        return <p>Error loading file</p>;
-    }
-
-    if (isPending) {
-        return <div>Loading file...</div>;
+        return (
+            <Typography variant='body1' color="error">
+                Error loading file
+            </Typography>
+        );
     }
 
     const handleDownloadClick = async () => {
@@ -41,19 +41,39 @@ const FileDisplay = ({
     };
 
     return (
-        <div>
-            <h3>File Content</h3>
-            {fileUrl.uri ? (
+        <Box
+            sx={{
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+                minHeight: "400px",
+            }}
+        >
+            {isPending ? (
+                <CircularProgress />
+            ) : fileUrl.uri ? (
                 <DocViewer
                     documents={[fileUrl]}
                     pluginRenderers={DocViewerRenderers}
                 />
             ) : (
-                <Button onClick={handleDownloadClick} disabled={!fileKey}>
-                    View file
-                </Button>
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100%",
+                        gap: 1,
+                    }}
+                >
+                    <Typography variant='body1' color='textSecondary'>
+                        File is encrypted. Please request decryption.
+                    </Typography>
+                    <Button onClick={handleDownloadClick} disabled={!fileKey}>
+                        View file
+                    </Button>
+                </Box>
             )}
-        </div>
+        </Box>
     );
 };
 
