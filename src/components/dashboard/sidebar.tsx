@@ -40,7 +40,7 @@ interface ISidebarMenu {
         icon: any;
         path: string;
         onclick?: any;
-    };
+    }[];
 }
 
 const Sidebar: FC<{ open: boolean; toggleDrawer: () => void }> = ({
