@@ -3,6 +3,7 @@ import {
     createSharedLink,
     getSharedLink,
     getSharedLinkByUserId,
+    revokeSharedLink,
 } from "@/services/shared-links";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
@@ -32,5 +33,13 @@ export const useGetSharedLinksByUserId = () => {
         queryKey: ["get-shared-links"],
         queryFn: getSharedLinkByUserId,
         retry: 1,
+    });
+};
+
+export const useRemoveSharedLink = ({ onSuccess }: { onSuccess: any }) => {
+    return useMutation({
+        mutationKey: ["revoke-shared-link"],
+        mutationFn: revokeSharedLink,
+        onSuccess,
     });
 };

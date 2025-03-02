@@ -1,5 +1,8 @@
 "use client";
-import { useGetSharedLinksByUserId } from "@/hooks/useSharedLinks";
+import {
+    useGetSharedLinksByUserId,
+    useRemoveSharedLink,
+} from "@/hooks/useSharedLinks";
 import {
     Alert,
     Box,
@@ -13,20 +16,39 @@ import { DataGrid, GridCellParams, GridColDef } from "@mui/x-data-grid";
 import { format } from "date-fns";
 import { ContentCopy } from "@mui/icons-material";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 const SharedLinksPage = () => {
+    const queryClient = useQueryClient();
+    const onSuccess = (data: any) => {
+        queryClient.invalidateQueries({
+            queryKey: ["get-shared-links"],
+        });
+        setSnackbarMessage(data?.message);
+        setCopySuccess(true);
+    };
     const { data: sharedLinks, isLoading } = useGetSharedLinksByUserId();
+    const {
+        mutate: revokeLink,
+        isPending,
+    } = useRemoveSharedLink({ onSuccess });
     const [copySuccess, setCopySuccess] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
 
     const handleCopyLink = async (linkToken: string) => {
         try {
             const link = `${process.env.NEXT_PUBLIC_URL}/shared-link/${linkToken}`;
             await navigator.clipboard.writeText(link);
+            setSnackbarMessage("Link Copied!");
             setCopySuccess(true);
         } catch (err) {
             console.log(err);
             setCopySuccess(true);
         }
+    };
+
+    const handleLinkRevoke = (data: any) => {
+        revokeLink(data?.row?.id);
     };
 
     const columns: GridColDef[] = [
@@ -77,8 +99,9 @@ const SharedLinksPage = () => {
                 <Button
                     color='error'
                     variant='outlined'
+                    loading={isPending}
                     onClick={() => {
-                        console.log(params);
+                        handleLinkRevoke(params);
                     }}
                 >
                     Revoke
@@ -86,6 +109,11 @@ const SharedLinksPage = () => {
             ),
         },
     ];
+
+    const handleSnackbarClose = () => {
+        setCopySuccess(false);
+        setSnackbarMessage("");
+    };
     return (
         <Container>
             <Box sx={{ height: 500, width: "100%", marginTop: 2 }}>
@@ -97,12 +125,12 @@ const SharedLinksPage = () => {
             </Box>
             <Snackbar open={copySuccess} autoHideDuration={6000}>
                 <Alert
-                    onClose={() => setCopySuccess(false)}
+                    onClose={handleSnackbarClose}
                     severity='success'
                     variant='filled'
                     sx={{ width: "100%" }}
                 >
-                    Link Copied!{" "}
+                    {snackbarMessage}
                 </Alert>
             </Snackbar>
         </Container>

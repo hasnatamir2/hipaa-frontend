@@ -25,3 +25,8 @@ export const getSharedLinkByUserId = async () => {
     const response = await axiosInstance.get("/shared-links");
     return response.data;
 }
+
+export const revokeSharedLink = async (id: string) => {
+    const response = await axiosInstance.delete(`/shared-links/${id}`);
+    return response.data;
+}
