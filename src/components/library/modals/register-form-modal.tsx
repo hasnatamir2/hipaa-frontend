@@ -31,10 +31,12 @@ const RegisterForm = ({
     selectedUser,
     open,
     onClose,
+    resetSelection,
 }: {
     selectedUser?: any;
     open: boolean;
     onClose: any;
+    resetSelection: any
 }) => {
     const {
         register,
@@ -51,15 +53,16 @@ const RegisterForm = ({
         queryClient.invalidateQueries({ queryKey: ["get-all-users"] });
         reset();
         onClose();
+        resetSelection();
     };
 
     const { mutate } = useRegisterUser({ onSuccess });
     const { mutate: updateRole } = useUpdateRole({ onSuccess });
 
     useEffect(() => {
+        console.log(selectedUser);
         if (selectedUser) {
             setValue("email", selectedUser.email);
-            setValue("role", selectedUser.role);
             setValue("password", "123456");
             setValue("confirmPassword", "123456");
         }
@@ -125,7 +128,7 @@ const RegisterForm = ({
                         type={showPassword ? "text" : "password"}
                         variant='outlined'
                         margin='normal'
-                        disabled={selectedUser.id}
+                        disabled={selectedUser?.id}
                         {...register("password", {
                             required:
                                 !selectedUser?.id && "Password is required",
@@ -140,11 +143,17 @@ const RegisterForm = ({
                         InputProps={{
                             endAdornment: showPassword ? (
                                 <Visibility
-                                    onClick={() => setShowPassword(false)}
+                                    onClick={() =>
+                                        !selectedUser?.id &&
+                                        setShowPassword(false)
+                                    }
                                 />
                             ) : (
                                 <VisibilityOff
-                                    onClick={() => setShowPassword(true)}
+                                    onClick={() =>
+                                        !selectedUser?.id &&
+                                        setShowPassword(true)
+                                    }
                                 />
                             ),
                         }}
@@ -155,7 +164,7 @@ const RegisterForm = ({
                         type={showPassword ? "text" : "password"}
                         variant='outlined'
                         margin='normal'
-                        disabled={selectedUser.id}
+                        disabled={selectedUser?.id}
                         {...register("confirmPassword", {
                             required:
                                 !selectedUser?.id &&
@@ -168,11 +177,17 @@ const RegisterForm = ({
                         InputProps={{
                             endAdornment: showPassword ? (
                                 <Visibility
-                                    onClick={() => setShowPassword(false)}
+                                    onClick={() =>
+                                        !selectedUser?.id &&
+                                        setShowPassword(false)
+                                    }
                                 />
                             ) : (
                                 <VisibilityOff
-                                    onClick={() => setShowPassword(true)}
+                                    onClick={() =>
+                                        !selectedUser?.id &&
+                                        setShowPassword(true)
+                                    }
                                 />
                             ),
                         }}
@@ -186,6 +201,9 @@ const RegisterForm = ({
                         <Select
                             labelId='role-label'
                             label='Role'
+                            defaultValue={
+                                selectedUser?.id ? selectedUser.role : ""
+                            }
                             {...register("role", {
                                 required: "Role is required",
                             })}

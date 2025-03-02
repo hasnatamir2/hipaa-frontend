@@ -15,7 +15,7 @@ import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import { useState } from "react";
 import UploadFileModal from "@/components/library/modals/upload-file-modal";
 import { useQueryClient } from "@tanstack/react-query";
-import { generateFileMetadata } from "@/utils";
+import { filIcon, generateFileMetadata } from "@/utils";
 
 const FolderDetails = () => {
     const { id } = useParams();
@@ -40,10 +40,13 @@ const FolderDetails = () => {
     };
 
     const modifiedFolders = folderDetails?.files?.map((file: any) => {
+        const fileTypeIcon = filIcon.get(file.mimeType) || "";
+
         return {
             ...file,
             secondaryContent: generateFileMetadata(file),
             link: `/dashboard/files/${file.id}`,
+            icon: fileTypeIcon,
         };
     });
 

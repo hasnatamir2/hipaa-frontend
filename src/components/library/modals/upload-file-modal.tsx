@@ -17,6 +17,7 @@ import Dropzone from "@/components/library/dropzone";
 import { BytesFormatter, fileToBase64 } from "@/utils";
 import CloseIcon from "@mui/icons-material/Close";
 import { useBulkUploadFiles } from "@/hooks/useFiles";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 const UploadFileModal = ({
@@ -32,6 +33,7 @@ const UploadFileModal = ({
         isPending,
         isSuccess,
     } = useBulkUploadFiles();
+    const queryClient = useQueryClient();
 
     const generatePreview = async (files: File[]) => {
         const previews = await Promise.all(
@@ -75,6 +77,7 @@ const UploadFileModal = ({
             setUploadedFiles([]);
             onSuccessfulUpload?.();
             handleClose();
+            queryClient.invalidateQueries({ queryKey: ["files"] });
         }
     }, [isSuccess]);
 

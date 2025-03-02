@@ -3,7 +3,6 @@
 import { FC, useState } from "react";
 import {
     List,
-    ListItem,
     ListItemText,
     ListItemIcon,
     Drawer,
@@ -17,18 +16,19 @@ import {
 import {
     Dashboard,
     Group,
-    PersonAdd,
     Folder,
     InsertDriveFile,
     ExitToApp,
     ExpandLess,
     ExpandMore,
     Groups,
+    Share,
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { DRAWER_WIDTH } from "@/constants/string";
 import { useAuth } from "@/hooks/useAuth";
+import { IUserData } from "@/interfaces";
+import { UserRole } from "@/constants/roles";
 
 interface ISidebarMenu {
     text: string;
@@ -43,27 +43,43 @@ interface ISidebarMenu {
     }[];
 }
 
-const Sidebar: FC<{ open: boolean; toggleDrawer: () => void }> = ({
-    open,
-    toggleDrawer,
-}) => {
+const Sidebar: FC<{
+    open: boolean;
+    toggleDrawer: () => void;
+    user: IUserData;
+}> = ({ open, toggleDrawer, user }) => {
     const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
     const { push } = useRouter();
     const { onLogout } = useAuth();
+    const { role } = user;
 
     const menuItems: ISidebarMenu[] = [
         { text: "Dashboard", icon: <Dashboard />, path: "/dashboard" },
-        {
-            text: "Manage Users",
-            icon: <Group />,
-            path: "/dashboard/users",
-        },
-        { text: "User Group", icon: <Groups />, path: "/dashboard/user-group" },
+        ...(role === UserRole.ADMIN
+            ? [
+                  {
+                      text: "Manage Users",
+                      icon: <Group />,
+                      path: "/dashboard/users",
+                  },
+                  {
+                      text: "User Group",
+                      icon: <Groups />,
+                      path: "/dashboard/user-group",
+                  },
+              ]
+            : []),
+
         { text: "Folders", icon: <Folder />, path: "/dashboard/folders" },
         {
             text: "My Files",
             icon: <InsertDriveFile />,
             path: "/dashboard/files",
+        },
+        {
+            text: "My Shared links",
+            icon: <Share />,
+            path: "/dashboard/shared-links",
         },
         {
             text: "Logout",
@@ -130,22 +146,26 @@ const Sidebar: FC<{ open: boolean; toggleDrawer: () => void }> = ({
                                     unmountOnExit
                                 >
                                     <List component='div' disablePadding>
-                                        {item.subItems?.map((subItem: any, index) => (
-                                            <ListItemButton
-                                                key={index}
-                                                sx={{ pl: 4 }}
-                                                onClick={() =>
-                                                    handleNavClick(subItem.path)
-                                                }
-                                            >
-                                                <ListItemIcon>
-                                                    {subItem.icon}
-                                                </ListItemIcon>
-                                                <ListItemText>
-                                                    {subItem.text}
-                                                </ListItemText>
-                                            </ListItemButton>
-                                        ))}
+                                        {item.subItems?.map(
+                                            (subItem: any, index) => (
+                                                <ListItemButton
+                                                    key={index}
+                                                    sx={{ pl: 4 }}
+                                                    onClick={() =>
+                                                        handleNavClick(
+                                                            subItem.path
+                                                        )
+                                                    }
+                                                >
+                                                    <ListItemIcon>
+                                                        {subItem.icon}
+                                                    </ListItemIcon>
+                                                    <ListItemText>
+                                                        {subItem.text}
+                                                    </ListItemText>
+                                                </ListItemButton>
+                                            )
+                                        )}
                                     </List>
                                 </Collapse>
                             </>

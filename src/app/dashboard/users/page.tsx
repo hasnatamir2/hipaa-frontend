@@ -6,16 +6,7 @@ import {
     Box,
     Button,
     Chip,
-    CircularProgress,
     Container,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    List,
-    ListItem,
-    ListItemText,
-    TextField,
     Typography,
 } from "@mui/material";
 import {
@@ -25,7 +16,7 @@ import {
     PersonAdd,
 } from "@mui/icons-material";
 import { DataGrid, GridCellParams, GridColDef } from "@mui/x-data-grid";
-import RegisterForm from "@/components/auth/register-form";
+import RegisterForm from "@/components/library/modals/register-form-modal";
 import { useState } from "react";
 
 const UserRoleIcon = new Map([
@@ -36,7 +27,7 @@ const UserRoleIcon = new Map([
 
 export default function UsersPage() {
     const { data: users, isLoading } = useAllUsers();
-    const [selectedUser, setSelectedUser] = useState({});
+    const [selectedUser, setSelectedUser] = useState(null);
     const [openRegisterUser, setOpenRegisterModal] = useState(false);
 
     const columns: GridColDef[] = [
@@ -85,13 +76,14 @@ export default function UsersPage() {
                 </Button>
             </Box>
             <Box sx={{ height: 500, width: "100%", marginTop: 2 }}>
-                <DataGrid rows={users} columns={columns} />
+                <DataGrid rows={users} columns={columns} loading={isLoading} />
             </Box>
             {openRegisterUser && (
                 <RegisterForm
                     selectedUser={selectedUser}
                     open={openRegisterUser}
                     onClose={() => setOpenRegisterModal(false)}
+                    resetSelection={() => setSelectedUser(null)}
                 />
             )}
         </Container>

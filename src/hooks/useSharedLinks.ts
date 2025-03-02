@@ -1,5 +1,9 @@
 "use client";
-import { createSharedLink, getSharedLink } from "@/services/shared-links";
+import {
+    createSharedLink,
+    getSharedLink,
+    getSharedLinkByUserId,
+} from "@/services/shared-links";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 interface ICreateSharedLink {
@@ -17,8 +21,16 @@ export const useCreateSharedLink = () => {
 
 export const useValidateLink = (token: string, password?: string) => {
     return useQuery({
-        queryKey: ['validate-shared-link', token, password],
+        queryKey: ["validate-shared-link", token, password],
         queryFn: () => getSharedLink(token, password),
-        retry: 1
-    })
-}
+        retry: 1,
+    });
+};
+
+export const useGetSharedLinksByUserId = () => {
+    return useQuery({
+        queryKey: ["get-shared-links"],
+        queryFn: getSharedLinkByUserId,
+        retry: 1,
+    });
+};

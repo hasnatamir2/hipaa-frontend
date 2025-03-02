@@ -20,7 +20,7 @@ const FileDisplay = ({
 
     if (error) {
         return (
-            <Typography variant='body1' color="error">
+            <Typography variant='body1' color='error'>
                 Error loading file
             </Typography>
         );
@@ -46,6 +46,9 @@ const FileDisplay = ({
                 border: "1px solid #ccc",
                 borderRadius: "8px",
                 minHeight: "400px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
             }}
         >
             {isPending ? (
@@ -63,13 +66,18 @@ const FileDisplay = ({
                         alignItems: "center",
                         height: "100%",
                         gap: 1,
+                        flexDirection: "column",
                     }}
                 >
                     <Typography variant='body1' color='textSecondary'>
                         File is encrypted. Please request decryption.
                     </Typography>
-                    <Button onClick={handleDownloadClick} disabled={!fileKey}>
-                        View file
+                    <Button
+                        onClick={handleDownloadClick}
+                        disabled={!fileKey}
+                        variant='outlined'
+                    >
+                        Request Decryption
                     </Button>
                 </Box>
             )}

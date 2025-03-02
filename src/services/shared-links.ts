@@ -20,3 +20,8 @@ export const getSharedLink = async (token: string, password?: string) => {
         throw error.response;
     }
 };
+
+export const getSharedLinkByUserId = async () => {
+    const response = await axiosInstance.get("/shared-links");
+    return response.data;
+}

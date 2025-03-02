@@ -25,6 +25,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { List as ListIcon, GridView, MoreVert } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface Action {
     label: string;
@@ -128,7 +129,14 @@ const ListGridView = ({
                                     <CardActionArea
                                         onClick={() => push(item.link)}
                                     >
-                                        <CardMedia></CardMedia>
+                                        <CardMedia sx={{ textAlign: "center" }}>
+                                            <Image
+                                                src={item.icon}
+                                                height={100}
+                                                width={100}
+                                                alt={item.name}
+                                            />
+                                        </CardMedia>
                                         <CardContent>
                                             <Typography variant='body1'>
                                                 {item.name}
@@ -178,7 +186,12 @@ const ListGridView = ({
                                     <ListItemIcon
                                         onClick={() => push(item.link)}
                                     >
-                                        {icon}
+                                        <Image
+                                            src={item.icon}
+                                            height={32}
+                                            width={32}
+                                            alt={item.name}
+                                        />
                                     </ListItemIcon>
                                     <ListItemText
                                         onClick={() => push(item.link)}

@@ -105,7 +105,13 @@ const FolderList = () => {
                             <ListItemIcon>
                                 <FolderIcon />
                             </ListItemIcon>
-                            <ListItemText primary={folder.name} />
+                            <ListItemText
+                                primary={folder.name}
+                                secondary={
+                                    folder.groupName &&
+                                    `Shared group: ${folder.groupName}`
+                                }
+                            />
                         </ListItem>
                     );
                 })}

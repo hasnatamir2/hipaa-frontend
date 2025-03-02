@@ -6,7 +6,8 @@ const theme = createTheme({
     fontFamily: 'var(--font-roboto)',
   },
   palette: {
-    mode: 'light'
+    mode: 'light',
+    
   },
 });
 

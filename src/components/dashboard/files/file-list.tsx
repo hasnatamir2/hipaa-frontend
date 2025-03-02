@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { CircularProgress } from "@mui/material";
 import useFiles, { useDeleteFile } from "@/hooks/useFiles";
-import { generateFileMetadata } from "@/utils";
+import { filIcon, generateFileMetadata } from "@/utils";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import ListGridView from "@/components/list-grid-view";
 import AssignFileToFolderModal from "../../library/modals/assign-file-to-folder-modal";
@@ -31,12 +31,14 @@ const FileList = () => {
     if (isLoading) return <CircularProgress />;
     if (error) return <div>Error loading files</div>;
 
-
     const modifiedFiles = files.map((file: any) => {
+        const fileTypeIcon = filIcon.get(file.mimeType) || "";
+
         return {
             ...file,
             secondaryContent: generateFileMetadata(file),
             link: `/dashboard/files/${file.id}`,
+            icon: fileTypeIcon,
         };
     });
 

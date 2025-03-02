@@ -11,7 +11,7 @@ import {
     Grid2,
 } from "@mui/material";
 import { useFileDetails } from "@/hooks/useFiles";
-import { BytesFormatter, filIcon, getFileType } from "@/utils";
+import { BytesFormatter, filIcon } from "@/utils";
 import FileDisplay from "@/components/dashboard/files/file-viewer";
 import { format } from "date-fns";
 

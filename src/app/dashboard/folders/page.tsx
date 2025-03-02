@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import FolderList from "@/components/dashboard/folders/folder-list";
-import { Fab, Tooltip } from "@mui/material";
+import { Container, Fab, Tooltip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import FolderForm from "@/components/library/modals/folder-form-modal";
 import { useQueryClient } from "@tanstack/react-query";
@@ -24,7 +24,7 @@ export default function FoldersPage() {
         mutate(data);
     };
     return (
-        <div>
+        <Container>
             <FolderList />
             <FolderForm
                 open={open}
@@ -42,6 +42,6 @@ export default function FoldersPage() {
                     <AddIcon />
                 </Fab>
             </Tooltip>
-        </div>
+        </Container>
     );
 }

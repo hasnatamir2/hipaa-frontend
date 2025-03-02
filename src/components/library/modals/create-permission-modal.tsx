@@ -23,8 +23,8 @@ interface ISharedLinkForm {
 }
 
 const accessOptinons = [
-    { value: PermissionLevel.VIEW, label: "View" },
-    { value: PermissionLevel.EDIT, label: "Edit" },
+    { value: PermissionLevel.VIEW, label: "View Only" },
+    { value: PermissionLevel.EDIT, label: "Edit & View" },
 ];
 
 const CreatePermissionModal = ({
