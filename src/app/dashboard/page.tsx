@@ -1,9 +1,9 @@
 "use client";
+import ActivityLogsTable from "@/components/dashboard/activity-logs/activity-logs-table";
 import { useDashboardContext } from "@/components/dashboard/layout";
 import { UserRole } from "@/constants/roles";
 import { IUserData } from "@/interfaces";
 import {
-    Box,
     Typography,
     Card,
     CardContent,
@@ -11,6 +11,8 @@ import {
     CardActionArea,
     CardActions,
     Button,
+    Divider,
+    Container,
 } from "@mui/material";
 import { FC } from "react";
 
@@ -47,11 +49,12 @@ const Dashboard: FC = () => {
         },
     ];
 
-    const cards = user.role === UserRole.ADMIN
-        ? [...adminCards, ...standardUserCards]
-        : standardUserCards;
+    const cards =
+        user.role === UserRole.ADMIN
+            ? [...adminCards, ...standardUserCards]
+            : standardUserCards;
     return (
-        <Box sx={{ flexGrow: 1, padding: 3 }}>
+        <Container sx={{ flexGrow: 1, padding: 3 }}>
             <Typography variant='h4' gutterBottom>
                 Overview
             </Typography>
@@ -90,7 +93,9 @@ const Dashboard: FC = () => {
                     </Grid2>
                 ))}
             </Grid2>
-        </Box>
+            <Divider sx={{ marginTop: 2 }} />
+            <ActivityLogsTable />
+        </Container>
     );
 };
 
