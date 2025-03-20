@@ -8,7 +8,13 @@ import {
     DialogContent,
     DialogTitle,
     CircularProgress,
+    Box,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
 } from "@mui/material";
+import { useFolders } from "@/hooks/useFolders";
 
 const FolderForm = ({
     open,
@@ -32,9 +38,11 @@ const FolderForm = ({
         handleSubmit,
         reset,
         formState: { errors },
-    } = useForm<{ name: string }>({
+    } = useForm<{ name: string; parentFolderId?: string }>({
         defaultValues,
     });
+
+    const { data: folders } = useFolders();
 
     const handleFormSubmit = (data: any) => {
         onSubmit(data);
@@ -47,7 +55,7 @@ const FolderForm = ({
                 {mode === "edit" ? "Edit Folder" : "Create Folder"}
             </DialogTitle>
             <DialogContent>
-                <form onSubmit={handleSubmit(handleFormSubmit)}>
+                <Box component='form' onSubmit={handleSubmit(handleFormSubmit)}>
                     <TextField
                         {...register("name", {
                             required: "Folder name is required",
@@ -58,6 +66,25 @@ const FolderForm = ({
                         error={!!errors.name}
                         helperText={errors.name?.message}
                     />
+                    <FormControl
+                        fullWidth
+                        margin='normal'
+                        error={!!errors.parentFolderId}
+                    >
+                        <InputLabel>Parent Folder</InputLabel>
+                        <Select
+                            label='Parent Folder'
+                            defaultValue=''
+                            {...register("parentFolderId")}
+                            fullWidth
+                        >
+                            {folders?.map((group: any) => (
+                                <MenuItem key={group.id} value={group.id} disabled={group.id === defaultValues?.id}>
+                                    {group.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                     <DialogActions>
                         {isLoading ? (
                             <CircularProgress />
@@ -75,7 +102,7 @@ const FolderForm = ({
                             </>
                         )}
                     </DialogActions>
-                </form>
+                </Box>
             </DialogContent>
         </Dialog>
     );

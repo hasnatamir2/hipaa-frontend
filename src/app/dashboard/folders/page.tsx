@@ -7,6 +7,7 @@ import AddIcon from "@mui/icons-material/Add";
 import FolderForm from "@/components/library/modals/folder-form-modal";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateFolder } from "@/hooks/useFolders";
+import { FoldersTree } from "@/components/folders-tree";
 
 export default function FoldersPage() {
     const [open, setOpen] = useState(false);
@@ -25,7 +26,8 @@ export default function FoldersPage() {
     };
     return (
         <Container>
-            <FolderList />
+            <FoldersTree />
+            {/* <FolderList /> */}
             <FolderForm
                 open={open}
                 onClose={() => setOpen(!open)}

@@ -47,7 +47,7 @@ const SharedLinksPage = () => {
         }
     };
 
-    const handleLinkRevoke = (data: any) => {
+    const handleLinkRevoke = (data: GridCellParams) => {
         revokeLink(data?.row?.id);
     };
 
@@ -95,7 +95,7 @@ const SharedLinksPage = () => {
             field: "actions",
             headerName: "Actions",
             width: 150,
-            renderCell: (params) => (
+            renderCell: (params: GridCellParams) => (
                 <Button
                     color='error'
                     variant='outlined'

@@ -53,3 +53,18 @@ export const getFoldersAccessible = async () => {
     const response = await axiosInstance.get(`/folders/accessible`);
     return response.data;
 };
+
+export const getFoldersTree = async () => {
+    const response = await axiosInstance.get(`/folders/folders-tree`);
+    return response.data;
+};
+
+export const assignParentFolder = async (
+    folderId: string,
+    parentId: string
+) => {
+    const response = await axiosInstance.put(
+        `/folders/${folderId}/assign-parent-folder/${parentId}`
+    );
+    return response.data;
+};

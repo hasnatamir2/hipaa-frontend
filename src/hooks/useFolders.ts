@@ -9,7 +9,9 @@ import {
     getFoldersWithFilesService,
     updateFolderNameService,
     getAllFolders,
-    getFoldersAccessible
+    getFoldersAccessible,
+    getFoldersTree,
+    assignParentFolder
 } from "@/services/folders";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -76,5 +78,19 @@ export const useFoldersAccessible = () => {
     return useQuery({
         queryKey: ['get-folders-accessible'],
         queryFn: getFoldersAccessible
+    })
+}
+
+export const useFoldersTree = () => {
+    return useQuery({
+        queryKey: ['get-folders-tree'],
+        queryFn: getFoldersTree
+    })
+}
+
+export const useAssignParentFolder = () => {
+    return useMutation({
+        mutationKey: ['assign-parent-folder'],
+        mutationFn: (data: any) => assignParentFolder(data.folderId, data.parentId)
     })
 }
