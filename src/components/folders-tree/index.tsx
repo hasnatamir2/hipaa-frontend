@@ -32,8 +32,22 @@ export const FoldersTree = () => {
                                     push(`/dashboard/folders/${folder.id}`)
                                 }
                             >
-                                <FolderIcon />
-                                {folder.name}
+                                <Typography
+                                    variant='body1'
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: 1,
+                                    }}
+                                >
+                                    <FolderIcon />
+                                    {folder.name}
+                                </Typography>
+                                <Typography variant='subtitle2' color='text.secondary' sx={{ fontStyle: "italic" }}>
+                                    {folder.groupName
+                                        ? `Shared Group: ${folder.groupName}`
+                                        : ""}
+                                </Typography>
                             </Box>
                         }
                     >
@@ -55,7 +69,14 @@ export const FoldersTree = () => {
                                         }
                                     >
                                         <FolderIcon />
-                                        {child.name}
+                                        <Typography variant='body1'>
+                                            {child.name}
+                                        </Typography>
+                                        <Typography variant='subtitle1'>
+                                            {child.groupName
+                                                ? `Shared Group: ${child.groupName}`
+                                                : ""}
+                                        </Typography>
                                     </Box>
                                 }
                             />

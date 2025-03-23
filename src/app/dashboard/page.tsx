@@ -27,7 +27,7 @@ const Dashboard: FC = () => {
         {
             title: "Folders",
             description: "Access your shared folders",
-            path: "//dashboard/folders",
+            path: "/dashboard/folders",
         },
     ];
 
