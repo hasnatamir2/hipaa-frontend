@@ -13,10 +13,11 @@ interface ICreateSharedLink {
     expiresAt?: string | null;
 }
 
-export const useCreateSharedLink = () => {
+export const useCreateSharedLink = ({ onSuccess }: any) => {
     return useMutation({
         mutationKey: ["create-shared-link"],
         mutationFn: (data: ICreateSharedLink) => createSharedLink(data),
+        onSuccess,
     });
 };
 

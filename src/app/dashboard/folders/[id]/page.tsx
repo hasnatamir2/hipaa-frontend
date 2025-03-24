@@ -23,12 +23,15 @@ import UploadFileModal from "@/components/library/modals/upload-file-modal";
 import { useQueryClient } from "@tanstack/react-query";
 import { filIcon, generateFileMetadata } from "@/utils";
 import FolderForm from "@/components/library/modals/folder-form-modal";
+import { UserRole } from "@/constants/roles";
 
 const FolderDetails = () => {
     const { id } = useParams();
 
     const [openUpload, setOpenUpload] = useState<boolean>(false);
     const [isOpen, setIsOpen] = useState(false);
+    const loggedInUser = localStorage.getItem("user");
+    const user = JSON.parse(loggedInUser as string);
 
     const queryClient = useQueryClient();
 
@@ -78,6 +81,10 @@ const FolderDetails = () => {
 
     if (isLoading) return <CircularProgress />;
     if (error) return <div>Error loading file details</div>;
+
+    const isOwnerOrAdmin =
+        user?.role === UserRole.ADMIN || user?.id === folderDetails?.owner?.id;
+
     return (
         <Container>
             <FolderForm
@@ -92,14 +99,16 @@ const FolderDetails = () => {
             />
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography variant='h4'>{folderDetails.name}</Typography>
-                <Box>
-                    <IconButton onClick={handleEdit}>
-                        <Edit />
-                    </IconButton>
-                    <IconButton onClick={handleDelete}>
-                        <Delete />
-                    </IconButton>
-                </Box>
+                {isOwnerOrAdmin && (
+                    <Box>
+                        <IconButton onClick={handleEdit}>
+                            <Edit />
+                        </IconButton>
+                        <IconButton onClick={handleDelete}>
+                            <Delete />
+                        </IconButton>
+                    </Box>
+                )}
             </Box>
             <List>
                 <ListGridView

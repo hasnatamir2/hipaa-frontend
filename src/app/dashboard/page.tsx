@@ -40,13 +40,8 @@ const Dashboard: FC = () => {
         {
             title: "Manage Groups",
             description: "Create and edit groups",
-            path: "/dashboard/user-groups",
-        },
-        {
-            title: "All Files",
-            description: "Access all system files",
-            path: "/dashboard/files",
-        },
+            path: "/dashboard/user-group",
+        }
     ];
 
     const cards =

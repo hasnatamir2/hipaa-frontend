@@ -38,7 +38,9 @@ const CreateSharedLinkModal = ({
     } = useForm<ISharedLinkForm>();
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [copySuccess, setCopySuccess] = useState(false);
-    const { mutate, data, isSuccess, isPending } = useCreateSharedLink();
+    const { mutate, data, isSuccess, isPending } = useCreateSharedLink({
+        onSuccess: () => {},
+    });
 
     const onSubmit = async ({ expiresAt, password }: ISharedLinkForm) => {
         setCopySuccess(false);
@@ -120,7 +122,14 @@ const CreateSharedLinkModal = ({
                         Create Share link
                     </Button>
                 </Box>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 1, marginTop: 1 }}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1,
+                        marginTop: 1,
+                    }}
+                >
                     {isSuccess && (
                         <Box
                             sx={{

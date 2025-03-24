@@ -1,7 +1,7 @@
 "use client";
 import { PermissionLevel, ResourceType } from "@/constants/permission-level";
-import { createPermissionForResource } from "@/services/permissions";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { createPermissionForResource, assignFileToUsers } from "@/services/permissions";
+import { useMutation } from "@tanstack/react-query";
 
 interface ICreateResourcePermission {
     resourceType: ResourceType,
@@ -20,3 +20,10 @@ export const useCreateFilePermission = () => {
         mutationFn: (data: ICreateResourcePermission) => createPermissionForResource(data),
     });
 };
+
+export const useAssignFileToUsers = () => {
+    return useMutation({
+        mutationKey: ["assign-file-to-users"],
+        mutationFn: (data: any) => assignFileToUsers(data),
+    });
+}

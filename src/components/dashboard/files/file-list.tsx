@@ -8,7 +8,7 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import ListGridView from "@/components/list-grid-view";
 import AssignFileToFolderModal from "../../library/modals/assign-file-to-folder-modal";
 import ConfirmDeleteModal from "@/components/library/modals/confirm-delete-modal";
-import CreateSharedLinkModal from "@/components/library/modals/create-shared-link-modal";
+// import CreateSharedLinkModal from "@/components/library/modals/create-shared-link-modal";
 import CreatePermissionModal from "@/components/library/modals/create-permission-modal";
 
 const FileList = () => {
@@ -16,7 +16,7 @@ const FileList = () => {
 
     const [openFolderModal, setOpenFolderModal] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
-    const [openSharedLinkModal, setOpenSharedLinkModal] = useState(false);
+    // const [openSharedLinkModal, setOpenSharedLinkModal] = useState(false);
     const [openPermissionModal, setOpenPermissionModal] = useState(false);
 
     const [selectedFileId, setSelectedFileId] = useState<string | null>(null);
@@ -62,15 +62,15 @@ const FileList = () => {
                             setOpenFolderModal(true);
                         },
                     },
+                    // {
+                    //     label: "Create Share link",
+                    //     onClick: (fileId: string) => {
+                    //         setSelectedFileId(fileId);
+                    //         setOpenSharedLinkModal(true);
+                    //     },
+                    // },
                     {
-                        label: "Create Share link",
-                        onClick: (fileId: string) => {
-                            setSelectedFileId(fileId);
-                            setOpenSharedLinkModal(true);
-                        },
-                    },
-                    {
-                        label: "Share Access",
+                        label: "Share File",
                         onClick: (fileId: string) => {
                             setSelectedFileId(fileId);
                             setOpenPermissionModal(true);
@@ -102,13 +102,13 @@ const FileList = () => {
                     loading={isPending}
                 />
             )}
-            {openSharedLinkModal && (
+            {/* {openSharedLinkModal && (
                 <CreateSharedLinkModal
                     fileId={selectedFileId as string}
                     onClose={() => setOpenSharedLinkModal(false)}
                     open={openSharedLinkModal}
                 />
-            )}
+            )} */}
             {openPermissionModal && (
                 <CreatePermissionModal
                     fileId={selectedFileId as string}
