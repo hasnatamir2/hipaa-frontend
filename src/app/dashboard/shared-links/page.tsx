@@ -28,10 +28,9 @@ const SharedLinksPage = () => {
         setCopySuccess(true);
     };
     const { data: sharedLinks, isLoading } = useGetSharedLinksByUserId();
-    const {
-        mutate: revokeLink,
-        isPending,
-    } = useRemoveSharedLink({ onSuccess });
+    const { mutate: revokeLink, isPending } = useRemoveSharedLink({
+        onSuccess,
+    });
     const [copySuccess, setCopySuccess] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
 
@@ -89,7 +88,9 @@ const SharedLinksPage = () => {
             headerName: "Expires At",
             width: 200,
             renderCell: (params: GridCellParams) =>
-                format(String(params.value), "yyyy/MM/dd hh:mm a"),
+                params.value
+                    ? format(String(params.value), "yyyy/MM/dd hh:mm a")
+                    : 'Never',
         },
         {
             field: "actions",

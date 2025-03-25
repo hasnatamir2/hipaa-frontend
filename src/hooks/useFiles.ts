@@ -6,6 +6,7 @@ import {
     downloadFileService,
     getFileDetailsService,
     getFilesService,
+    getFilesSharedWithMeService,
     uploadFileService,
 } from "@/services/files";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -19,7 +20,7 @@ export const useFileDetails = (fileId: string) => {
         queryKey: ["file", fileId],
         queryFn: () => getFileDetailsService(fileId),
         enabled: !!fileId,
-        retry: 1
+        retry: 1,
     });
 };
 
@@ -65,6 +66,13 @@ export const useDeleteFile = ({ onSuccess }: any) => {
         mutationFn: (fileId: string) => deleteFileService(fileId),
         onSuccess,
     });
-}
+};
+
+export const useFilesSharedWithMe = () => {
+    return useQuery({
+        queryKey: ["files-shared-with-me"],
+        queryFn: getFilesSharedWithMeService,
+    });
+};
 
 export default useFiles;

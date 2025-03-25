@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { CircularProgress } from "@mui/material";
-import useFiles, { useDeleteFile } from "@/hooks/useFiles";
+import { useDeleteFile, useFilesSharedWithMe } from "@/hooks/useFiles";
 import { filIcon, generateFileMetadata } from "@/utils";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import ListGridView from "@/components/list-grid-view";
@@ -12,7 +12,8 @@ import ConfirmDeleteModal from "@/components/library/modals/confirm-delete-modal
 import CreatePermissionModal from "@/components/library/modals/create-permission-modal";
 
 const FileList = () => {
-    const { data: files, isLoading, error, refetch } = useFiles();
+    const { data: files, isLoading, error, refetch } = useFilesSharedWithMe();
+    // const { data: myFiles } = useFilesSharedWithMe();
 
     const [openFolderModal, setOpenFolderModal] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);

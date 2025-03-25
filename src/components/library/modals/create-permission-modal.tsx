@@ -162,6 +162,8 @@ const CreatePermissionModal = ({ open, onClose, fileId }: any) => {
     } = useForm<ISharedLinkForm>();
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [copySuccess, setCopySuccess] = useState(false);
+    const loggedInUser = localStorage.getItem("user");
+    const user = JSON.parse(loggedInUser as string);
     const handleSuccess = () => {
         setStep(1);
     };
@@ -324,13 +326,17 @@ const CreatePermissionModal = ({ open, onClose, fileId }: any) => {
                                         getOptionKey={(option: any) =>
                                             option.email
                                         }
+                                        getOptionDisabled={(option) =>
+                                            option.email === user.email
+                                        }
+                                        clearOnEscape
                                         size='small'
                                         defaultValue={[]}
                                         filterSelectedOptions
                                         renderTags={(value, getTagProps) =>
                                             value.map((option, index) => (
                                                 <Chip
-                                                    size="small"
+                                                    size='small'
                                                     label={option.email}
                                                     {...getTagProps({ index })}
                                                 />
@@ -362,7 +368,7 @@ const CreatePermissionModal = ({ open, onClose, fileId }: any) => {
                         <FormControl
                             fullWidth
                             margin='normal'
-                            size="small"
+                            size='small'
                             error={!!errorsAccess.accessLevel}
                         >
                             <InputLabel>Access Level</InputLabel>

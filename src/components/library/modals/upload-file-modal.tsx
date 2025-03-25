@@ -77,7 +77,7 @@ const UploadFileModal = ({
             setUploadedFiles([]);
             onSuccessfulUpload?.();
             handleClose();
-            queryClient.invalidateQueries({ queryKey: ["files"] });
+            queryClient.invalidateQueries({ queryKey: ["files-shared-with-me"] });
         }
     }, [isSuccess]);
 

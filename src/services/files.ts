@@ -72,3 +72,8 @@ export const deleteFileService = async (fileId: string) => {
     const response = await axiosInstance.delete(`/files/${fileId}`);
     return response.data;
 };
+
+export const getFilesSharedWithMeService = async () => {
+    const response = await axiosInstance.get("/files/shared-with-me");
+    return response.data;
+}
